@@ -34,6 +34,8 @@ class EmailRequest extends FormRequest
     return [
       'subject.required' => 'Fill out a subject for the email',
       'body.required' => 'You can\'t send a blank email',
+      'recipients.required' => 'You are missing recipients to the email',
+      'recipients.exists' => 'The specified recipients are not in the database',
     ];
   }
 }

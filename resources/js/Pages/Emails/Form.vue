@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import TipTap from '@/Components/TipTap.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useContactStore } from '@/Stores/contactStore';
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, router, useForm } from '@inertiajs/vue3';
 import { IconMailFast } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import TurndownService from 'turndown';
@@ -22,7 +22,11 @@ const form = useForm({
   recipients: selectedContacts,
 })
 
-console.log(selectedContacts.value);
+if (!selectedContacts.value.length) {
+  router.visit('/', {
+    replace: true
+  })
+}
 
 function send() {
   form.body = turndownService.turndown(form.body)
@@ -41,7 +45,7 @@ defineOptions({
 
   <form
     @submit.prevent="send"
-    class="max-w-lg mx-auto space-y-10 mt-28">
+    class="max-w-2xl mx-auto space-y-10 mt-28">
 
     <div>
       <label
