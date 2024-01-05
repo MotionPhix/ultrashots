@@ -65,7 +65,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
     <Link
       as="button"
       method="delete"
-      v-if="$page.url === '/'"
+      v-if="$page.url === '/' || $page.url.startsWith('/tags')"
       :href="route('contacts.destroy', { ids: selectedContacts })"
       class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70">
       <IconTrash class="w-5 h-5 stroke-current" /> <span class="hidden md:inline-flex">Delete</span>
@@ -99,6 +99,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
       <Link
         :href="route('mail.compose')"
         class="flex items-center gap-2 px-1.5 py-1 font-semibold rounded-md"
+        v-if="!$page.url.startsWith('/deleted')"
         preserve-scroll
         as="button">
 

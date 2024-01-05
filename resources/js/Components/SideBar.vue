@@ -132,7 +132,9 @@ onMounted(() => {
                 v-for="(item) in tags"
                 :href="route('tags.filter', item?.label)"
                 class="flex items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
-                v-if="tags && tags.length"
+                :class="{
+                  'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.label}`)
+                }"
                 :key="item.value"
                 preserve-scroll
               >
@@ -226,6 +228,10 @@ onMounted(() => {
         v-for="(item) in tags"
         :key="item.value" :href="route('tags.filter', item.label)"
         class="flex gap-2 items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+        :class="{
+          'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.label}`)
+        }"
+        preserve-scroll
       >
         <component
           :is="IconTag"

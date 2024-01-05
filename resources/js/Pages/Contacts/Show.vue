@@ -7,10 +7,11 @@ import PrimaryButtonLink from '@/Components/PrimaryButtonLink.vue';
 import InteractionsTab from '@/Components/tabs/InteractionsTab.vue';
 import OverviewTab from '@/Components/tabs/OverviewTab.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { useContactStore } from '@/Stores/contactStore';
 import type { Contact, ContactsData } from '@/types/index';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { IconMailFast, IconUserMinus } from '@tabler/icons-vue';
-import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 interface Props {
   baseGroup: ContactsData
@@ -19,28 +20,22 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const selectedContactIds = ref<string[]>([])
+const contactStore = useContactStore()
 
-const selectedEmails = computed(() => {
-  if(selectedContactIds.value.length) return selectedContactIds.value
+const {
+  selectedContacts
+} = storeToRefs(contactStore)
 
-  return [props.contact.cid]
-})
+const { setSelectedContacts } = contactStore
 
-function isSelected(contactId: string) {
-  return (selectedContactIds.value.includes(contactId));
+function onCheckSelection() {
+
+  if (!selectedContacts.value.length) setSelectedContacts(props.contact.cid)
+
 }
 
-function onContactSelect(contactId: string) {
-
-  if (isSelected(contactId)) {
-    selectedContactIds.value = selectedContactIds.value.filter((selectedId) => {
-      return (selectedId !== contactId);
-    });
-
-  } else {
-    selectedContactIds.value.push(contactId);
-  }
+const onSendMail = () => {
+  router.get(route('mail.compose'))
 }
 
 defineOptions({ layout: AuthenticatedLayout })
@@ -51,14 +46,14 @@ defineOptions({ layout: AuthenticatedLayout })
 
   <ActionMenu :contactBase="baseGroup" />
 
-  <div class="pt-12 mb-10 lg:mb-0 lg:h-screen mx-auto flex gap-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex gap-6 pt-12 mx-auto mb-10 lg:mb-0 lg:h-screen max-w-7xl sm:px-6 lg:px-8">
 
     <section
-      class="pt-10 max-w-sm w-full space-y-4 overflow-y-auto scrollbar-thin hidden lg:block">
+      class="hidden w-full max-w-sm pt-10 space-y-4 overflow-y-auto scrollbar-thin lg:block">
       <div
         v-for="(contactsArray, group) in baseGroup"
         :key="group"
-        class="pt-2 mr-4 pb-6">
+        class="pt-2 pb-6 mr-4">
         <span
           class="flex items-center justify-center w-8 h-8 p-1 mb-4 ml-16 font-bold text-white bg-gray-600 rounded dark:bg-gray-200 dark:text-gray-900">
           {{ group }}
@@ -67,8 +62,6 @@ defineOptions({ layout: AuthenticatedLayout })
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-500">
           <ContactCard
             v-for="(contact) in contactsArray"
-            :onContactSelect="onContactSelect"
-            :selected="selectedContactIds"
             :contact="contact"
             :key="contact.id" />
         </ul>
@@ -78,46 +71,45 @@ defineOptions({ layout: AuthenticatedLayout })
     <section
       class="scrollbar-thin lg:overflow-y-auto mt-12 space-y-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <div
-        class="empty:hidden h-full flex flex-col justify-center items-center"
-        v-if="selectedContactIds.length > 1">
+        class="flex flex-col items-center justify-center h-full empty:hidden"
+        v-if="selectedContacts.length > 1">
         <div class="flex flex-col items-center gap-3 text-gray-500">
-          <IconContacts class="text-gray-400 h-48 w-48" stroke-width="1" />
+          <IconContacts class="w-48 h-48 text-gray-400" stroke-width="1" />
 
-          <h2 class="text-xl font-semibold leading-none text-center mt-6">
-            {{ selectedContactIds.length }} contacts selected
+          <h2 class="mt-6 text-xl font-semibold leading-none text-center">
+            {{ selectedContacts.length }} contacts selected
           </h2>
 
-          <span class="mt-4 mb-1 h-px bg-rose-500 block w-full"></span>
+          <span class="block w-full h-px mt-4 mb-1 bg-rose-500"></span>
 
           <div class="flex gap-6">
-            <Link
-              as="button"
+            <button
+              @click="onSendMail()"
               class="flex gap-2 items-center text-gray-500 border-gray-500 border hover:border-gray-900 rounded-lg dark:border-slate-600 dark:text-gray-500 font-semibold my-4 px-3 py-1.5 dark:hover:text-gray-400 dark:hover:border-gray-400 hover:text-gray-900 transition duration-300"
-              :href="route('mail.compose', selectedEmails)"
-              preserve-scroll>
+              type="button">
 
               <IconMailFast class="w-5 h-5" />
               <span>Send mail</span>
 
-            </Link>
+            </button>
 
             <Link
               as="button"
               class="flex gap-2 items-center text-gray-500 border-gray-500 border hover:border-gray-900 rounded-lg dark:border-slate-600 dark:text-gray-500 font-semibold my-4 px-3 py-1.5 dark:hover:text-gray-400 dark:hover:border-gray-400 hover:text-gray-900 transition duration-300"
-              :href="route('contacts.destroy', selectedContactIds)" preserve-scroll>
+              :href="route('contacts.destroy', { ids: [selectedContacts] })" preserve-scroll>
 
-            <IconUserMinus class="w-5 h-5" />
-            <span>Delete</span>
+              <IconUserMinus class="w-5 h-5" />
+              <span>Delete</span>
 
             </Link>
           </div>
         </div>
       </div>
 
-      <div v-else class="empty:hidden p-6">
+      <div v-else class="p-6 empty:hidden">
         <section class="flex items-center gap-6">
           <div
-            class="w-24 h-24 shrink-0 text-3xl rounded-full items-center justify-center flex font-bold"
+            class="flex items-center justify-center w-24 h-24 text-3xl font-bold rounded-full shrink-0"
             :class="contact.is_favorite ? 'bg-blue-500 text-blue-50' : 'bg-lime-500 text-lime-900'">
             <span>
               {{ contact.first_name[0] }}{{ contact.last_name[0] }}
@@ -133,7 +125,8 @@ defineOptions({ layout: AuthenticatedLayout })
 
             <div class="flex items-center gap-6 font-semibold">
               <PrimaryButtonLink
-                :href="route('mail.compose', { emails: selectedEmails })">
+                :href="route('mail.compose')"
+                @click="onCheckSelection">
                 <IconMailFast />
                 <span>Email</span>
               </PrimaryButtonLink>
@@ -142,14 +135,14 @@ defineOptions({ layout: AuthenticatedLayout })
 
               <Link
                 as="button"
-                class="hover:opacity-70 transition duration-300"
+                class="transition duration-300 hover:opacity-70"
                 :href="route('contacts.edit', contact.cid)">
                 Edit
               </Link>
 
               <Link
                 as="button"
-                class="text-rose-500 hover:opacity-70 transition duration-300"
+                class="transition duration-300 text-rose-500 hover:opacity-70"
                 :href="route('contacts.destroy', {ids: [contact.cid]})"
                 method="delete">
                 Delete

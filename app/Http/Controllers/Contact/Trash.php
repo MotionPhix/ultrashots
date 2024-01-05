@@ -14,7 +14,7 @@ class Trash extends Controller
 
     Contact::whereIn('cid', $idsArray)->delete();
 
-    return redirect()->back();
+    return redirect()->route('contacts.index');
   }
 
 }

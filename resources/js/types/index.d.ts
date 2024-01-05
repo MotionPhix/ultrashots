@@ -86,6 +86,10 @@ export interface Contact {
   tags: Tag[];
 }
 
+export interface ContactsData {
+  [group: string]: Contact[];
+}
+
 export interface Tag {
   id?: number;
   name: string;

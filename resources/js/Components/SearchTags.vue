@@ -139,7 +139,7 @@ onMounted(() => {
 <template>
   <div class="relative tag-input">
     <div
-      class="tag-item bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+      class="bg-blue-100 m-0.5 text-blue-800 text-xs font-medium px-2.5 py-2 rounded dark:bg-blue-900 dark:text-blue-300"
       v-for="tag in tags" :key="tag.id || tag">
       {{ tag.label || tag }}
 
@@ -147,7 +147,7 @@ onMounted(() => {
     </div>
 
     <button
-      class="flex items-center gap-2 py-1 bg-blue-100 text-gray-800 text-xs font-medium me-2 px-2.5 rounded dark:bg-gray-900 dark:text-gray-300"
+      class="flex hover:opacity-75 duration-300 transition items-center gap-2 py-1 bg-blue-100 text-gray-800 m-0.5 text-xs font-medium px-2.5 rounded dark:bg-gray-900 dark:text-gray-300"
       @click="toggleDropdown(true)"
       type="button">
       <IconPlus />
@@ -164,7 +164,7 @@ onMounted(() => {
             <input
               v-model="searchTerm"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search categories"
+              placeholder="Search tags"
               @input="filterTags" />
           </li>
 

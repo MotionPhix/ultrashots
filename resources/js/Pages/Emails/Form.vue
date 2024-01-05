@@ -7,6 +7,7 @@ import { Link, router, useForm } from '@inertiajs/vue3';
 import { IconMailFast } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import TurndownService from 'turndown';
+import { onMounted } from 'vue';
 
 const contactStore = useContactStore()
 
@@ -22,12 +23,6 @@ const form = useForm({
   recipients: selectedContacts,
 })
 
-if (!selectedContacts.value.length) {
-  router.visit('/', {
-    replace: true
-  })
-}
-
 function send() {
   form.body = turndownService.turndown(form.body)
 
@@ -35,6 +30,16 @@ function send() {
     preserveScroll: true,
   })
 }
+
+onMounted(() => {
+
+  if (!selectedContacts.value.length) {
+    router.visit('/', {
+      replace: true
+    })
+  }
+
+})
 
 defineOptions({
   layout: AuthenticatedLayout
@@ -45,7 +50,7 @@ defineOptions({
 
   <form
     @submit.prevent="send"
-    class="max-w-2xl mx-auto space-y-10 mt-28">
+    class="max-w-2xl px-6 mx-auto mt-16 space-y-10 sm:mt-8">
 
     <div>
       <label
