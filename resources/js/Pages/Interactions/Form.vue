@@ -5,8 +5,7 @@ import BreezeButton from '@/Components/PrimaryButton.vue';
 // import Spinner from '@/Components/Spinner.vue';
 import BreezeInput from '@/Components/TextInput.vue';
 import TipTap from '@/Components/TipTap.vue';
-import { Head } from '@inertiajs/vue3';
-import { useForm } from 'laravel-precognition-vue-inertia';
+import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   interaction: {
@@ -35,14 +34,14 @@ const submit = () => form.submit({
 <template>
   <Head title="Contact" />
 
-  <div class="flex relative justify-center min-h-screen bg-gray-100 items-top dark:bg-gray-900 sm:items-center sm:pt-0">
+  <div class="relative flex justify-center min-h-screen bg-gray-100 items-top dark:bg-gray-900 sm:items-center sm:pt-0">
     <form class="w-full max-w-lg" @submit.prevent="submit">
       <div>
         <BreezeLabel for="name" value="Interaction type" />
         <BreezeInput
           v-model="form.type"
           placeholder="Enter an interction type, e.g, 'Phone call with Kingsley'"
-          class="block mt-1 w-full" type="text"
+          class="block w-full mt-1" type="text"
           @change="form.validate('type')"
           autocomplete="name"
           id="name"  />
@@ -57,7 +56,7 @@ const submit = () => form.submit({
         <BreezeInputError :message="form.errors.notes" />
       </div>
 
-      <div class="flex justify-end items-center mt-4">
+      <div class="flex items-center justify-end mt-4">
         <BreezeButton
           :class="{ 'opacity-25': form.processing }"
           :disabled="form.processing" class="flex gap-2">

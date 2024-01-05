@@ -2,11 +2,15 @@ import './bootstrap';
 
 import 'maz-ui/css/main.css';
 
+import "smart-tagz/dist/smart-tagz.css";
+
 import '../css/app.css';
 
 import 'vfonts/Inter.css';
 
 import 'v-calendar/style.css';
+
+import 'vue-touch-ripple/style.css';
 
 import type { DefineComponent } from 'vue';
 
@@ -20,16 +24,13 @@ import mask from '@alpinejs/mask';
 import Alpine from 'alpinejs';
 
 import { createPinia } from 'pinia';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 import VueTouchRipple from 'vue-touch-ripple';
-import 'vue-touch-ripple/style.css';
+import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
 const pinia = createPinia()
-
-import { PhoneInput } from '@lbgm/phone-number-input';
 
 window.Alpine = Alpine
 Alpine.plugin(mask)
@@ -37,7 +38,7 @@ Alpine.plugin(mask)
 Alpine.start()
 
 createInertiaApp({
-  title: title => `${title} - ${appName}`,
+  title: title => `${title} | ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
@@ -47,14 +48,13 @@ createInertiaApp({
         duration: 200,
       })
       .use(ZiggyVue, Ziggy)
-      .component('PhoneInput', PhoneInput)
       .mixin({
         methods: {
           route: window.route,
           isRoute(...routes: []) {
             return routes.some(route => this.route().current(route))
-          }
-        }
+          },
+        },
       })
       .mount(el)
   },

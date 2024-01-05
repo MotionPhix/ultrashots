@@ -3,18 +3,15 @@ import { Link, router } from '@inertiajs/vue3'
 
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
-
-import {
-IconCalendar,
-IconClock,
-IconStar,
-IconTrash
-} from '@tabler/icons-vue'
-
 import ContactListIcon from '@/Components/Icons/IconContactList.vue'
 import ContactsIcon from '@/Components/Icons/IconContacts.vue'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import { useTagStore } from '@/Stores/tagStore'
+import { IconStar, IconTag, IconTrash } from '@tabler/icons-vue'
+import axios from 'axios'
+import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const props = defineProps({
   sidebarOpened: {
@@ -24,6 +21,14 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+
+const tagStore = useTagStore()
+
+const {
+  tags,
+} = storeToRefs(tagStore)
+
+const { setTags } = tagStore
 
 function closeMenu() {
   emit('close')
@@ -61,14 +66,13 @@ const mainNavigation = [
   },
 ]
 
-const libraryNavigation = [
-  { href: '/', label: 'Watch later', icon: IconClock },
-  { href: '/', label: 'Scheduled', icon: IconCalendar },
-]
-
-const following = [
-  { href: '/', label: 'Constantin Druc', imageUrl: 'https://pbs.twimg.com/profile_images/1333896976602193922/MtWztkxt_400x400.jpg' },
-]
+onMounted(() => {
+  axios
+    .get('/tags')
+    .then((feedback) => {
+      setTags(feedback.data)
+    })
+})
 </script>
 
 <template>
@@ -84,9 +88,9 @@ const following = [
         as="template"
       >
         <div
-          class="relative z-10 flex flex-col h-full border-r dark:border-r-0 border-gray-200 w-72 bg-gray-50 dark:bg-gray-800 md:hidden">
+          class="relative z-10 flex flex-col h-full border-r border-gray-200 dark:border-r-0 w-72 bg-gray-50 dark:bg-gray-800 md:hidden">
 
-          <div class="px-4 mb-8 mt-4">
+          <div class="px-4 mt-4 mb-8">
             <Link
               href="/"
               as="button"
@@ -125,11 +129,14 @@ const following = [
               </h3>
 
               <Link
-                v-for="(item, index) in libraryNavigation"
-                :key="index" :href="item.href" class="flex items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+                v-for="(item) in tags"
+                :href="route('tags.filter', item?.label)"
+                class="flex items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+                v-if="tags && tags.length"
+                :key="item.value"
+                preserve-scroll
               >
-                <component
-                  :is="item.icon"
+                <IconTag
                   class="w-5 h-5 mr-2 text-gray-400 group-hover:text-lime-500"
                 />
                 {{ item.label }}
@@ -176,7 +183,7 @@ const following = [
     </Dialog>
   </TransitionRoot>
 
-  <aside class="hidden w-64 md:flex-col border-r border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
+  <aside class="hidden w-64 border-r border-gray-200 md:flex-col bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
     <div class="px-6 py-4 mb-8">
       <h3 class="flex items-center gap-4 text-base font-bold text-gray-900 dark:text-white">
         <ApplicationLogo class="w-10 h-10" />
@@ -204,7 +211,7 @@ const following = [
       >
         <component
           :is="item.icon"
-          class="stroke-current w-6 h-6 group-hover:text-lime-500"
+          class="w-6 h-6 stroke-current group-hover:text-lime-500"
         />
         {{ item.label }}
       </Link>
@@ -216,11 +223,12 @@ const following = [
       </h3>
 
       <Link
-        v-for="(item, index) in libraryNavigation"
-        :key="index" :href="item.href" class="flex gap-2 items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+        v-for="(item) in tags"
+        :key="item.value" :href="route('tags.filter', item.label)"
+        class="flex gap-2 items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
       >
         <component
-          :is="item.icon"
+          :is="IconTag"
           class="text-gray-400 group-hover:text-lime-500"
         />
         <span>{{ item.label }}</span>

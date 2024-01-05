@@ -28,3 +28,18 @@
   }
 }
 
+@layer components {
+  /* tags */
+  .tag-container, .tag_container_custom {
+    @apply bg-red-500
+  }
+
+  .tag_name_custom {
+    @apply text-xs
+  }
+
+  .input-wrapper input {
+    @apply bg-rose-500 text-red-500
+  }
+}
+

@@ -98,7 +98,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
     <touch-ripple>
       <Link
         :href="route('mail.compose')"
-        class="flex items-center gap-2 px-1.5 py-1 rounded-md"
+        class="flex items-center gap-2 px-1.5 py-1 font-semibold rounded-md"
         preserve-scroll
         as="button">
 

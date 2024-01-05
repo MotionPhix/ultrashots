@@ -9,7 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { useFieldStore } from '@/Stores/fieldStore'
 import type { Contact } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Link, router, useForm } from '@inertiajs/vue3'
+import { Head, Link, router, useForm } from '@inertiajs/vue3'
 import { IconPlus } from '@tabler/icons-vue'
 import axios from 'axios'
 import { debounce } from 'lodash'
@@ -111,11 +111,11 @@ function onSubmit() {
     formData.bio = form.bio
 
   if (
-    form.addresses[0].id ||
-    form.addresses[0].street ||
-    form.addresses[0].city ||
-    form.addresses[0].state ||
-    form.addresses[0].country
+    form.addresses[0].id
+    || form.addresses[0].street
+    || form.addresses[0].city
+    || form.addresses[0].state
+    || form.addresses[0].country
   )
     formData.addresses = form.addresses
 
@@ -140,9 +140,9 @@ function onSubmit() {
       formData.company.job_title = form.company_job_title
   }
 
-  if (!!props.contact.cid) {
+  if (props.contact.cid) {
     router.patch(route('contacts.update', props.contact.cid), formData, { preserveScroll: true })
-    return;
+    return
   }
 
   router.post(route('contacts.store'), formData, { preserveScroll: true })
@@ -150,17 +150,22 @@ function onSubmit() {
 </script>
 
 <template>
+  <Head :title="contact.cid ? `Edit ${contact.first_name} ${contact.last_name}` : 'Create new contact'" />
+
   <form
-    class="flex flex-col gap-6 mx-8 my-16 mb-4 max-w-2xl md:mx-auto"
-    @submit.prevent="onSubmit">
+    class="flex flex-col max-w-2xl gap-6 mx-8 my-16 mb-4 md:mx-auto"
+    @submit.prevent="onSubmit"
+  >
     <section class="flex gap-6">
       <div v-if="hasTitle || !!form.title">
         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Title
         </label>
-        <input id="title" v-model="form.title" type="text"
+        <input
+          id="title" v-model="form.title" type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-          placeholder="Dr., Mr., Mrs.,">
+          placeholder="Dr., Mr., Mrs.,"
+        >
 
         <InputError :message="$page.props.errors.title" />
       </div>
@@ -170,9 +175,11 @@ function onSubmit() {
           First name
         </label>
 
-        <input id="name" v-model="form.first_name" type="text"
+        <input
+          id="name" v-model="form.first_name" type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-          placeholder="Enter first name">
+          placeholder="Enter first name"
+        >
 
         <InputError :message="$page.props.errors.first_name" />
       </div>
@@ -182,9 +189,11 @@ function onSubmit() {
       <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         Middle name
       </label>
-      <input id="middle_name" v-model="form.middle_name" type="text"
+      <input
+        id="middle_name" v-model="form.middle_name" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter middle name">
+        placeholder="Enter middle name"
+      >
 
       <InputError :message="$page.props.errors.middle_name" />
     </div>
@@ -194,9 +203,11 @@ function onSubmit() {
         Surname
       </label>
 
-      <input id="last_name" v-model="form.last_name" type="text"
+      <input
+        id="last_name" v-model="form.last_name" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Type surname">
+        placeholder="Type surname"
+      >
 
       <InputError :message="$page.props.errors.last_name" />
     </div>
@@ -206,9 +217,11 @@ function onSubmit() {
         Nickname
       </label>
 
-      <input id="nickname" v-model="form.nickname" type="text"
+      <input
+        id="nickname" v-model="form.nickname" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter nickname">
+        placeholder="Enter nickname"
+      >
 
       <InputError :message="$page.props.errors.nickname" />
     </div>
@@ -216,9 +229,12 @@ function onSubmit() {
     <div v-if="fieldStore.showTag">
       <Menu as="div" class="relative z-10 inline-flex">
         <MenuButton
-          class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" stroke-width="2"
-            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+          >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M12 5l0 14" />
             <path d="M5 12l14 0" />
@@ -226,21 +242,35 @@ function onSubmit() {
           <span>Add field</span>
         </MenuButton>
 
-        <transition enter-active-class="transition duration-100 ease-out transform" enter-from-class="scale-90 opacity-0"
-          enter-to-class="scale-100 opacity-100" leave-active-class="transition duration-100 ease-in transform"
-          leave-from-class="scale-100 opacity-100" leave-to-class="scale-90 opacity-0">
+        <transition
+          enter-active-class="transition duration-100 ease-out transform"
+          enter-from-class="scale-90 opacity-0"
+          enter-to-class="scale-100 opacity-100"
+          leave-active-class="transition duration-100 ease-in transform"
+          leave-from-class="scale-100 opacity-100"
+          leave-to-class="scale-90 opacity-0"
+        >
           <MenuItems
-            class="absolute left-0 w-48 mt-2 overflow-hidden origin-top-left bg-white border rounded-md shadow-lg focus:outline-none">
-            <MenuItem v-slot="{ active }" @click="toggleField('hasTitle')">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Title</span>
+            class="absolute left-0 w-48 mt-2 overflow-hidden origin-top-left bg-white border rounded-md shadow-lg focus:outline-none"
+          >
+            <MenuItem
+              v-slot="{ active }"
+              @click="toggleField('hasTitle')"
+            >
+              <span
+                :class="{ 'bg-gray-100': active }"
+                class="block px-4 py-2 text-sm text-gray-700"
+              >
+                Title
+              </span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="toggleField('hasMiddleName')">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Middle name</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Middle name</span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="toggleField('hasNickname')">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Nick name</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Nick name</span>
             </MenuItem>
           </MenuItems>
         </transition>
@@ -276,9 +306,11 @@ function onSubmit() {
         Job title
       </label>
 
-      <input id="job_title" v-model="form.company_job_title" type="text"
+      <input
+        id="job_title" v-model="form.company_job_title" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter job title">
+        placeholder="Enter job title"
+      >
 
       <InputError :message="$page.props.errors['company.job_title']" />
     </div>
@@ -288,9 +320,11 @@ function onSubmit() {
         Department
       </label>
 
-      <input id="department" v-model="form.company_department" type="text"
+      <input
+        id="department" v-model="form.company_department" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter department name">
+        placeholder="Enter department name"
+      >
 
       <InputError :message="$page.props.errors['company.department']" />
     </div>
@@ -300,9 +334,11 @@ function onSubmit() {
         Address
       </label>
 
-      <input id="company_address" v-model="form.company_address" type="text"
+      <input
+        id="company_address" v-model="form.company_address" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter work address">
+        placeholder="Enter work address"
+      >
 
       <InputError :message="$page.props.errors['company.address']" />
     </div>
@@ -316,7 +352,8 @@ function onSubmit() {
         id="company_website"
         v-model="form.company_url" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter office website e.g. https://www.example.com">
+        placeholder="Enter office website e.g. https://www.example.com"
+      >
 
       <InputError :message="$page.props.errors['company.url']" />
     </div>
@@ -326,9 +363,11 @@ function onSubmit() {
         Motto/Slogan
       </label>
 
-      <input id="company_slogan" v-model="form.company_slogan" type="text"
+      <input
+        id="company_slogan" v-model="form.company_slogan" type="text"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter slogan">
+        placeholder="Enter slogan"
+      >
 
       <InputError :message="$page.props.errors['company.slogan']" />
     </div>
@@ -336,33 +375,37 @@ function onSubmit() {
     <div class="col-span-2">
       <Menu as="div" class="relative">
         <MenuButton
-          class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500">
+          class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500"
+        >
           <IconPlus /> <span>Add work field</span>
         </MenuButton>
 
-        <transition enter-active-class="transition duration-100 ease-out transform" enter-from-class="scale-90 opacity-0"
+        <transition
+          enter-active-class="transition duration-100 ease-out transform" enter-from-class="scale-90 opacity-0"
           enter-to-class="scale-100 opacity-100" leave-active-class="transition duration-100 ease-in transform"
-          leave-from-class="scale-100 opacity-100" leave-to-class="scale-90 opacity-0">
+          leave-from-class="scale-100 opacity-100" leave-to-class="scale-90 opacity-0"
+        >
           <MenuItems
-            class="absolute left-0 z-10 w-48 mt-2 overflow-hidden origin-top-left bg-white border rounded-md shadow-lg -top-44 focus:outline-none">
+            class="absolute left-0 z-10 w-48 mt-2 overflow-hidden origin-top-left bg-white border rounded-md shadow-lg -top-44 focus:outline-none"
+          >
             <MenuItem v-slot="{ active }" @click="hasJobTitle = !hasJobTitle">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Job title</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Job title</span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="hasDepartment = !hasDepartment">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Department</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Department</span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="hasLocation = !hasLocation">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Office location</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Office location</span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="hasUrl = !hasUrl">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Office website</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Office website</span>
             </MenuItem>
 
             <MenuItem v-slot="{ active }" @click="hasSlogan = !hasSlogan">
-            <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Motto</span>
+              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Motto</span>
             </MenuItem>
           </MenuItems>
         </transition>
@@ -372,31 +415,38 @@ function onSubmit() {
     <div class="mt-4">
       <label
         for="bio"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
         Notes
       </label>
 
       <section>
-        <TipTap v-model="form.bio" />
+        <TipTap v-model="form.bio" placeholder="Write down some notes" />
       </section>
 
-      <InputError :message="$page.props.errors['bio']" />
+      <InputError :message="$page.props.errors.bio" />
     </div>
 
     <div class="flex items-center justify-end col-span-4 gap-4 pt-4">
-      <button type="submit" :disabled="form.processing"
-        class="text-white inline-flex transition duration-300 items-center bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-semibold rounded-lg px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+      <button
+        type="submit" :disabled="form.processing"
+        class="text-white inline-flex transition duration-300 items-center bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-semibold rounded-lg px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+      >
         <svg class="w-6 h-6 mr-1 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
+          <path
+            fill-rule="evenodd"
             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd" />
+            clip-rule="evenodd"
+          />
         </svg>
 
         {{ contact.id ? 'Update ' : 'Save ' }}
       </button>
 
-      <Link as="button" :href="route('contacts.index')"
-        class="py-2.5 text-gray-800 font-semibold dark:text-white hover:text-opacity-40 transition duration-300 inline-flex items-center border-gray-700 hover:border-opacity-40 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg px-5 text-center border dark:border-gray-600 dark:hover:border-gray-700 dark:focus:ring-gray-800">
+      <Link
+        as="button" :href="route('contacts.index')"
+        class="py-2.5 text-gray-800 font-semibold dark:text-white hover:text-opacity-40 transition duration-300 inline-flex items-center border-gray-700 hover:border-opacity-40 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg px-5 text-center border dark:border-gray-600 dark:hover:border-gray-700 dark:focus:ring-gray-800"
+      >
         Cancel
       </Link>
     </div>

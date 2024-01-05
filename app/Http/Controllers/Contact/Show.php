@@ -18,7 +18,7 @@ class Show extends Controller
 
     return Inertia::render('Contacts/Show', [
       'baseGroup' => $contactsArray,
-      'contact' => $contact->load('phones', 'emails', 'addresses'),
+      'contact' => $contact->load('phones', 'emails', 'addresses', 'tags'),
     ]);
   }
 }
