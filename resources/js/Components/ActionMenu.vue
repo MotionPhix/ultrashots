@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import IconContactAdd from '@/Components/icons/IconContactAdd.vue';
-import IconContactRemove from '@/Components/icons/IconContactRemove.vue';
+import IconContactAdd from '@/Components/Icon/IconContactAdd.vue';
+import IconContactRemove from '@/Components/Icon/IconContactRemove.vue';
 import { useContactStore } from '@/Stores/contactStore';
 import { Link, usePage } from '@inertiajs/vue3';
-import { IconArrowCapsule, IconHeartPlus, IconMailForward, IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconArrowCapsule, IconHeartMinus, IconHeartPlus, IconMailForward, IconPencil, IconTrash } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
@@ -56,17 +56,26 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
     <Link
       as="button"
       method="patch"
-      v-if="Object.keys(contactBase).length && !$page.url.startsWith('/deleted')"
-      :href="route('contacts.favourite', { ids: selectedContacts })"
+      v-if="Object.keys(contactBase).length && (!$page.url.startsWith('/deleted') && !$page.url.startsWith('/favourites'))"
+      :href="route('contacts.favourite', { ids: selectedContacts } as any)"
       class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70">
       <IconHeartPlus class="w-5 h-5 stroke-current" /> <span class="hidden md:inline-flex">Add to favourites</span>
     </Link>
 
     <Link
       as="button"
+      method="patch"
+      v-if="Object.keys(contactBase).length && $page.url.startsWith('/favourites')"
+      :href="route('contacts.favourite', { ids: selectedContacts } as any)"
+      class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70">
+      <IconHeartMinus class="w-5 h-5 stroke-current" /> <span class="hidden md:inline-flex">Remove from favourites</span>
+    </Link>
+
+    <Link
+      as="button"
       method="delete"
       v-if="$page.url === '/' || $page.url.startsWith('/tags')"
-      :href="route('contacts.destroy', { ids: selectedContacts })"
+      :href="route('contacts.destroy', { ids: selectedContacts } as any)"
       class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70">
       <IconTrash class="w-5 h-5 stroke-current" /> <span class="hidden md:inline-flex">Delete</span>
     </Link>
@@ -75,7 +84,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
       as="button"
       method="delete"
       v-if="$page.url.startsWith('/deleted')"
-      :href="route('contacts.destroy', { ids: selectedContacts })"
+      :href="route('contacts.destroy', { ids: selectedContacts } as any)"
       class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70">
       <IconContactRemove class="w-5 h-5 stroke-current text-rose-500" /> <span class="hidden md:inline-flex">Delete</span>
     </Link>
@@ -84,7 +93,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
       as="button"
       method="put"
       v-if="$page.url.startsWith('/deleted')"
-      :href="route('contacts.restore', { ids: selectedContacts })"
+      :href="route('contacts.restore', { ids: selectedContacts } as any)"
       class="flex items-center gap-2 font-semibold transition duration-300 hover:opacity-70"
       preserve-scroll>
 
@@ -104,7 +113,7 @@ if (url.value.startsWith('/deleted') || url.value.startsWith('/favourites')) {
         as="button">
 
         <IconMailForward class="w-5 h-5" />
-        <span class="hidden md:inline-flex">Send mail</span>
+        <span class="hidden md:inline-flex">Send Email</span>
 
       </Link>
     </touch-ripple>

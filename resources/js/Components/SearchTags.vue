@@ -1,6 +1,5 @@
-<script setup lang="ts">
+<script setup>
 import { useTagStore } from '@/Stores/tagStore';
-import { Contact, Tag } from '@/types';
 import { router } from '@inertiajs/vue3';
 import { IconPlus } from '@tabler/icons-vue';
 import { OnClickOutside } from '@vueuse/components';
@@ -8,34 +7,33 @@ import axios from 'axios';
 import { debounce } from 'lodash';
 import { onMounted, ref } from 'vue';
 
-interface temporaryTag {
-  label: string;
-  value: string;
-}
-
-interface Props {
-  modelValue: Tag[],
-  contact: Contact
-}
-
 const tagStore = useTagStore()
 
 const { setTags } = tagStore
 
-const props = defineProps<Props>()
+const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => []
+  },
+  contact: {
+    type: Object,
+    default: () => {}
+  }
+})
 
 const filteredTags = ref([]);
-const tags = ref<temporaryTag[]>([]);
+const tags = ref([]);
 const searchTerm = ref('');
 const inputVisible = ref(false);
 
-const message = ref<string | null>()
+const message = ref()
 
 const availableTags = ref([]);
 
 const error = ref(null)
 
-const removeTag = (tag: temporaryTag) => {
+const removeTag = (tag) => {
   tags.value = tags.value.filter((t) => t !== tag);
 
   router.patch(route('tags.detach', props.contact.cid),
@@ -53,7 +51,7 @@ const toggleDropdown = (show) => {
   inputVisible.value = show;
 };
 
-const addSelectedTag = (tag: temporaryTag) => {
+const addSelectedTag = (tag) => {
   error.value = null;
 
   const trimmedLabel = tag.label.trim().toLowerCase();
@@ -114,7 +112,7 @@ const loadTags = debounce((query = null) => {
     })
 }, 500)
 
-async function createTag(tag: string) {
+async function createTag(tag) {
   router
     .post(route('tags.store', props.contact.cid), {
       name: tag,

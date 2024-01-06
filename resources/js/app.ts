@@ -2,13 +2,9 @@ import './bootstrap';
 
 import 'maz-ui/css/main.css';
 
-import "smart-tagz/dist/smart-tagz.css";
-
 import '../css/app.css';
 
 import 'vfonts/Inter.css';
-
-import 'v-calendar/style.css';
 
 import 'vue-touch-ripple/style.css';
 
@@ -16,26 +12,31 @@ import type { DefineComponent } from 'vue';
 
 import { createApp, h } from 'vue';
 
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
 
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-
-import mask from '@alpinejs/mask';
-import Alpine from 'alpinejs';
 
 import { createPinia } from 'pinia';
 
 import VueTouchRipple from 'vue-touch-ripple';
+
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
 const pinia = createPinia()
 
-window.Alpine = Alpine
-Alpine.plugin(mask)
+router.on('success', (event) => {
+  let isAuthenticated = event.detail.page.props.auth.user !== null;
+  window.localStorage.setItem('isAuthenticated', `${isAuthenticated}`);
+});
 
-Alpine.start()
+window.addEventListener('popstate', (event) => {
+  if (window.localStorage.getItem('isAuthenticated') === 'false') {
+    event.stopImmediatePropagation();
+    router.replace('/login');
+  }
+});
 
 createInertiaApp({
   title: title => `${title} | ${appName}`,

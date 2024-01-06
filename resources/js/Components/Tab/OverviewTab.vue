@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import SearchTags from '@/Components/SearchTags.vue';
 import type { Contact } from '@/types/index';
 import { Link } from '@inertiajs/vue3';
 import { IconAlbum, IconBuildingArch, IconMail, IconMap2, IconNote, IconNotes, IconPhone, IconTag } from '@tabler/icons-vue';
-import SearchTags from '../SearchTags.vue';
 
 interface Props {
   contact: Contact
@@ -25,11 +25,11 @@ const props = defineProps<Props>()
         <div>
           <h3 class="mb-4 text-lg font-semibold">Email(s)</h3>
 
-          <p v-for="(email, idx) in contact.emails" :key="email.id">
-            <strong>
+          <!-- <p v-for="(email) in contact.emails" :key="email.id">
+            <strong class="truncate">
               {{ email.email }}
             </strong>
-          </p>
+          </p> -->
         </div>
       </section>
 
@@ -155,7 +155,7 @@ const props = defineProps<Props>()
 
             <p
               class="mb-3 text-sm font-normal"
-              v-if="contact.last_company.pivot.department">
+              v-if="contact.last_company?.pivot?.department">
               {{ contact.last_company.pivot.department }}
             </p>
 

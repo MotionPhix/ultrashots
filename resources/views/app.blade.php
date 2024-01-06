@@ -16,9 +16,9 @@
   @inertiaHead
 </head>
 
-<body class="font-sans antialiased">
+<body class="overflow-hidden font-sans antialiased">
   @inertia
 
-  <x-responsive-helper />
+  {{-- <x-responsive-helper /> --}}
 </body>
 </html>

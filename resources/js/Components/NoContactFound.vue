@@ -2,8 +2,8 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
-import IconContactAdd from './icons/IconContactAdd.vue';
-import IconContacts from './icons/IconContacts.vue';
+import IconContactAdd from '@/Components/Icon/IconContactAdd.vue';
+import IconContacts from '@/Components/Icon/IconContacts.vue';
 
 const { url } = usePage()
 
@@ -32,9 +32,9 @@ const context = computed(() => {
 
 <template>
   <div class="flex flex-col items-center gap-3">
-    <IconContacts class="text-gray-400 h-48 w-48" stroke-width="1" />
+    <IconContacts class="w-48 h-48 text-gray-400" stroke-width="1" />
 
-    <h2 class="text-xl font-semibold leading-none text-center text-gray-500 mt-6">
+    <h2 class="mt-6 text-xl font-semibold leading-none text-center text-gray-500">
       No {{ context.title }} found!
     </h2>
 

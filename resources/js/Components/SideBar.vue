@@ -3,8 +3,8 @@ import { Link, router } from '@inertiajs/vue3'
 
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
-import ContactListIcon from '@/Components/Icons/IconContactList.vue'
-import ContactsIcon from '@/Components/Icons/IconContacts.vue'
+import ContactListIcon from '@/Components/Icon/IconContactList.vue'
+import ContactsIcon from '@/Components/Icon/IconContacts.vue'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { useTagStore } from '@/Stores/tagStore'
@@ -88,7 +88,7 @@ onMounted(() => {
         as="template"
       >
         <div
-          class="relative z-10 flex flex-col h-full border-r border-gray-200 dark:border-r-0 w-72 bg-gray-50 dark:bg-gray-800 md:hidden">
+          class="relative z-10 flex flex-col border-r border-gray-200 h-dvh dark:border-r-0 w-72 bg-gray-50 dark:bg-gray-800 md:hidden">
 
           <div class="px-4 mt-4 mb-8">
             <Link
@@ -147,11 +147,7 @@ onMounted(() => {
 
             <span class="flex-1"></span>
 
-            <div class="mb-2">
-              <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                Following
-              </h3>
-
+            <div class="mb-2 border-t border-gray-200 dark:border-gray-700">
               <Link
                 as="button"
                 href="/logout"
@@ -185,8 +181,8 @@ onMounted(() => {
     </Dialog>
   </TransitionRoot>
 
-  <aside class="hidden w-64 border-r border-gray-200 md:flex-col bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
-    <div class="px-6 py-4 mb-8">
+  <aside class="relative hidden w-64 border-r border-gray-200 md:flex-col bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
+    <div class="px-6 py-4 mb-5">
       <h3 class="flex items-center gap-4 text-base font-bold text-gray-900 dark:text-white">
         <ApplicationLogo class="w-10 h-10" />
 
@@ -196,57 +192,57 @@ onMounted(() => {
       </h3>
     </div>
 
-    <div class="mb-10">
-      <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-        Main
-      </h3>
+    <section
+      class="absolute w-full overflow-y-auto top-20 bottom-14 scrollbar-thin">
 
-      <Link
-        v-for="(item, index) in mainNavigation"
-        :href="item.filter ? route(item.href, item.filter) : route(item.href)"
-        class="flex w-full items-center gap-2 px-6 py-2.5 text-gray-400 hover:text-lime-600 group"
-        :class="{
-          'font-bold text-lime-600': item.active ? $page.url.startsWith(item.active) : $page.url === '/'
-        }"
-        :key="index"
-        as="button"
-      >
-        <component
-          :is="item.icon"
-          class="w-6 h-6 stroke-current group-hover:text-lime-500"
-        />
-        {{ item.label }}
-      </Link>
-    </div>
+      <div class="mb-10">
+        <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
+          Main
+        </h3>
 
-    <div class="mb-10">
-      <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-        Tags
-      </h3>
+        <Link
+          v-for="(item, index) in mainNavigation"
+          :href="item.filter ? route(item.href, item.filter) : route(item.href)"
+          class="flex w-full items-center gap-2 px-6 py-2.5 text-gray-400 hover:text-lime-600 group"
+          :class="{
+            'font-bold text-lime-600': item.active ? $page.url.startsWith(item.active) : $page.url === '/'
+          }"
+          :key="index"
+          as="button"
+        >
+          <component
+            :is="item.icon"
+            class="w-6 h-6 stroke-current group-hover:text-lime-500"
+          />
+          {{ item.label }}
+        </Link>
+      </div>
 
-      <Link
-        v-for="(item) in tags"
-        :key="item.value" :href="route('tags.filter', item.label)"
-        class="flex gap-2 items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
-        :class="{
-          'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.label}`)
-        }"
-        preserve-scroll
-      >
-        <component
-          :is="IconTag"
-          class="text-gray-400 group-hover:text-lime-500"
-        />
-        <span>{{ item.label }}</span>
-      </Link>
-    </div>
+      <div class="mb-10">
+        <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
+          Tags
+        </h3>
 
-    <span class="flex-1"></span>
+        <Link
+          v-for="(item) in tags"
+          :key="item.value" :href="route('tags.filter', item.label)"
+          class="flex gap-2 items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+          :class="{
+            'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.label}`)
+          }"
+          preserve-scroll
+        >
+          <component
+            :is="IconTag"
+            class="text-gray-400 group-hover:text-lime-500"
+          />
+          <span>{{ item.label }}</span>
+        </Link>
+      </div>
 
-    <div class="mb-2">
-      <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-        Following
-      </h3>
+    </section>
+
+    <div class="absolute bottom-0 z-40 w-full mb-2 border-t border-gray-200 dark:border-gray-700">
 
       <Link
         as="button"

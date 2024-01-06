@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import ActionMenu from '@/Components/ActionMenu.vue';
 import ContactCard from '@/Components/ContactCard.vue';
-import IconContacts from '@/Components/Icons/IconContacts.vue';
+import IconContacts from '@/Components/Icon/IconContacts.vue';
 import NavTabs from '@/Components/NavTabs.vue';
 import PrimaryButtonLink from '@/Components/PrimaryButtonLink.vue';
-import InteractionsTab from '@/Components/tabs/InteractionsTab.vue';
-import OverviewTab from '@/Components/tabs/OverviewTab.vue';
+import InteractionsTab from '@/Components/Tab/InteractionsTab.vue';
+import OverviewTab from '@/Components/Tab/OverviewTab.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useContactStore } from '@/Stores/contactStore';
 import type { Contact, ContactsData } from '@/types/index';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { IconMailFast, IconUserMinus } from '@tabler/icons-vue';
+import { IconMailFast, IconPencil, IconPhone, IconTrash, IconUserMinus } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 
 interface Props {
@@ -69,7 +69,7 @@ defineOptions({ layout: AuthenticatedLayout })
     </section>
 
     <section
-      class="scrollbar-thin lg:overflow-y-auto mt-12 space-y-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      class="scrollbar-thin mx-2 sm:mx-0 lg:overflow-y-auto mt-12 space-y-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <div
         class="flex flex-col items-center justify-center h-full empty:hidden"
         v-if="selectedContacts.length > 1">
@@ -96,7 +96,7 @@ defineOptions({ layout: AuthenticatedLayout })
             <Link
               as="button"
               class="flex gap-2 items-center text-gray-500 border-gray-500 border hover:border-gray-900 rounded-lg dark:border-slate-600 dark:text-gray-500 font-semibold my-4 px-3 py-1.5 dark:hover:text-gray-400 dark:hover:border-gray-400 hover:text-gray-900 transition duration-300"
-              :href="route('contacts.destroy', { ids: [selectedContacts] })" preserve-scroll>
+              :href="route('contacts.destroy', { ids: [selectedContacts] } as any)" preserve-scroll>
 
               <IconUserMinus class="w-5 h-5" />
               <span>Delete</span>
@@ -106,24 +106,24 @@ defineOptions({ layout: AuthenticatedLayout })
         </div>
       </div>
 
-      <div v-else class="p-6 empty:hidden">
+      <div v-else class="p-2 sm:p-6 empty:hidden">
         <section class="flex items-center gap-6">
           <div
-            class="flex items-center justify-center w-24 h-24 text-3xl font-bold rounded-full shrink-0"
+            class="items-center justify-center hidden w-24 h-24 text-3xl font-bold rounded-full sm:flex shrink-0"
             :class="contact.is_favorite ? 'bg-blue-500 text-blue-50' : 'bg-lime-500 text-lime-900'">
             <span>
               {{ contact.first_name[0] }}{{ contact.last_name[0] }}
             </span>
           </div>
 
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col w-full gap-1">
             <h3 class="text-3xl">
               {{ contact.first_name + ' ' + contact.last_name }}
             </h3>
 
-            <span>{{ contact.last_company?.pivot.job_title }}</span>
+            <span>{{ contact.last_company?.pivot?.job_title }}</span>
 
-            <div class="flex items-center gap-6 font-semibold">
+            <div class="flex items-center w-full gap-2 font-semibold sm:gap-6">
               <PrimaryButtonLink
                 :href="route('mail.compose')"
                 @click="onCheckSelection">
@@ -131,21 +131,25 @@ defineOptions({ layout: AuthenticatedLayout })
                 <span>Email</span>
               </PrimaryButtonLink>
 
-              <button>Call</button>
+              <span class="flex-1"></span>
+
+              <button>
+                <IconPhone />
+              </button>
 
               <Link
                 as="button"
                 class="transition duration-300 hover:opacity-70"
                 :href="route('contacts.edit', contact.cid)">
-                Edit
+                <IconPencil />
               </Link>
 
               <Link
                 as="button"
                 class="transition duration-300 text-rose-500 hover:opacity-70"
-                :href="route('contacts.destroy', {ids: [contact.cid]})"
+                :href="route('contacts.destroy', {ids: [contact.cid]} as any)"
                 method="delete">
-                Delete
+                <IconTrash />
               </Link>
             </div>
           </div>

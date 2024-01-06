@@ -3,8 +3,6 @@ import { UseDark } from '@vueuse/components'
 
 import { IconMenu, IconMoon, IconSun } from '@tabler/icons-vue'
 
-// import { Modal } from '/vendor/emargareten/inertia-modal'
-
 import { ref } from 'vue'
 
 import SideBar from '@/Components/SideBar.vue'
@@ -19,6 +17,9 @@ function toggleMenu() {
 </script>
 
 <template>
+
+  <ToastList />
+
   <div class="fixed inset-0 flex min-h-screen bg-gray-100 dark:bg-gray-900">
     <SideBar :sidebar-opened="toggle" @close="toggleMenu" />
 
@@ -47,8 +48,4 @@ function toggleMenu() {
       </main>
     </section>
   </div>
-
-  <ToastList />
-
-  <!-- <Modal /> -->
 </template>

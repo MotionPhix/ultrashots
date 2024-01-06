@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import TipTap from '@/Components/TipTap.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useContactStore } from '@/Stores/contactStore';
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { IconMailFast } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import TurndownService from 'turndown';
@@ -26,23 +26,23 @@ const form = useForm({
 function send() {
   form.body = turndownService.turndown(form.body)
 
-  form.post(route('mail.send', { contacts: selectedContacts.value }),{
+  form.post(route('mail.send', { contacts: selectedContacts.value } as any),{
     preserveScroll: true,
   })
 }
 
+defineOptions({
+  layout: AuthenticatedLayout
+})
+
 onMounted(() => {
 
-  if (!selectedContacts.value.length) {
-    router.visit('/', {
-      replace: true
+  if (usePage().url.startsWith('/compose') && !selectedContacts.value.length) {
+    router.get(route('contacts.index'), {}, {
+      preserveScroll: true
     })
   }
 
-})
-
-defineOptions({
-  layout: AuthenticatedLayout
 })
 </script>
 

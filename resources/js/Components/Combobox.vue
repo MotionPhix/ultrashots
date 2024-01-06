@@ -14,18 +14,14 @@ IconSelector as ChevronUpDownIcon
 import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
-  modelValue: Object,
-  options: {
-    type: Array,
-    default: () => [],
-  },
+  modelValue: [Number, Object],
   loadOptions: Function,
   createOption: Function,
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const options = ref(props.options)
+const options = ref([])
 const isLoading = ref(false)
 const query = ref('')
 

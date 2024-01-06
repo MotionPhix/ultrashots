@@ -7,5 +7,7 @@ Button Text
 </x-mail::panel> --}}
 
 <br>
-**{{ $user->first_name }}**, {{ config('app.name') }}
+Regards,
+<br>
+** {{ $user->first_name }} **, {{ config('app.name') }}
 </x-mail::message>

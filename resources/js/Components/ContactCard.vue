@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useContactStore } from '@/Stores/contactStore';
 import type { Contact } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import MazCheckbox from 'maz-ui/components/MazCheckbox';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
@@ -11,6 +11,7 @@ const props = defineProps<{
 }>()
 
 const contactStore = useContactStore()
+const page = usePage()
 
 const {
   selectedContacts
@@ -18,11 +19,11 @@ const {
 
 const { setSelectedContacts, unsetSelectedContacts } = contactStore
 
-function isSelected(contactId: string) {
+function isSelected(contactId?: string) {
   return (selectedContacts.value.includes(contactId));
 }
 
-function onContactSelect(contactId: string) {
+function onContactSelect(contactId?: string) {
 
   if (isSelected(contactId)) {
     unsetSelectedContacts(contactId)
@@ -34,12 +35,14 @@ function onContactSelect(contactId: string) {
 const full_name = computed(() =>
   `${props.contact?.first_name} ${props.contact?.last_name}`,
 )
+
+const param: any = computed(() => route().params)
 </script>
 
 <template>
   <li
     class="relative px-4 py-3 transition duration-300 ease-in-out rounded-md sm:py-4 hover:bg-gray-200 dark:hover:bg-gray-600"
-    :class="{ 'bg-gray-300 dark:bg-gray-700': contact.cid === route().params['contact'] }">
+    :class="{ 'bg-gray-300 dark:bg-gray-700': contact.cid === param.contact }">
     <div
       class="absolute top-auto bottom-auto z-20 flex items-center justify-center flex-shrink-0 w-10 h-10 font-semibold transition duration-300 rounded-full cursor-pointer hover:bg-transparent group"
       :class="selectedContacts.length ? '' : contact.is_favorite ? 'bg-blue-500 text-blue-50' : 'bg-lime-500 text-lime-900'">

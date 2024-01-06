@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="editor">
-    <section class="flex items-center gap-6">
+    <section class="flex items-center justify-start gap-6 overflow-hidden overflow-x-auto scrollbar-none scroll-smooth">
       <!-- <input
         type="color"
         @input="editor.chain().focus().setColor($event.target.value).run()"

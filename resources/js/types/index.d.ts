@@ -1,5 +1,11 @@
 import type { CountryCode } from 'maz-ui/components/MazPhoneNumberInput';
 
+interface Temporay {
+  label?: string;
+  value?: number;
+  missing?: boolean;
+}
+
 export interface Links {
   url: string;
   label: string;
@@ -15,18 +21,18 @@ export interface User {
 }
 
 export interface Company {
-  id: number;
+  id: any;
   name?: string;
   slogan?: string;
   url?: string;
   job_title?: string;
   department?: string;
   address?: string;
-  pivot: {
-    contact_id: number;
-    company_id: number;
-    job_title: string;
-    department: string | null;
+  pivot?: {
+    contact_id?: number;
+    company_id?: number;
+    job_title?: string;
+    department?: string;
   };
 }
 
@@ -92,7 +98,7 @@ export interface ContactsData {
 
 export interface Tag {
   id?: number;
-  name: string;
+  name?: string;
   slug?: string;
 }
 

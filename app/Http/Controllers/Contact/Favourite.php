@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Contact;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
-use Illuminate\Http\Request;
 
 class Favourite extends Controller
 {
@@ -12,10 +11,19 @@ class Favourite extends Controller
   {
     $idsArray = explode(',', $ids);
 
-    Contact::whereIn('cid', $idsArray)->update([
-      'is_favorite' => True
-    ]);
+    // Contact::whereIn('cid', $idsArray)->update([
+    //   'is_favorite' => True
+    // ]);
 
-    return redirect()->route('contacts.index', [ 'filter' => 'favourites' ]);
+    // Get the current values of is_favorite for the specified IDs
+    $currentFavorites = Contact::whereIn('cid', $idsArray)->pluck('is_favorite', 'cid');
+
+    foreach ($currentFavorites as $cid => $isFavorite) {
+      Contact::where('cid', $cid)->update([
+        'is_favorite' => !$isFavorite,
+      ]);
+    }
+
+    return redirect()->route('contacts.index', ['filter' => 'favourites']);
   }
 }

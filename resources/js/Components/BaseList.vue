@@ -1,12 +1,12 @@
-<script setup lang="ts">
-import { computed } from 'vue'
+<script setup>
 import {
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-} from '@headlessui/vue'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+Listbox,
+ListboxButton,
+ListboxOption,
+ListboxOptions,
+} from '@headlessui/vue';
+import { IconCheck as CheckIcon, IconSelector as ChevronUpDownIcon } from '@tabler/icons-vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   options: Array,
@@ -43,17 +43,17 @@ const label = computed(() => props.options.filter((option) => {
   >
     <div class="relative mt-1">
       <ListboxButton
-        class="relative w-full cursor-default rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 py-3 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+        class="relative w-full py-3 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
       >
         <span v-if="label" class="block truncate">{{ label }}</span>
-        <span v-else class="block dark:text-gray-400 text-gray-600 truncate">
+        <span v-else class="block text-gray-600 truncate dark:text-gray-400">
           {{ props.placeholder }}
         </span>
         <span
-          class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+          class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
         >
           <ChevronUpDownIcon
-            class="h-5 w-5 text-gray-400"
+            class="w-5 h-5 text-gray-400"
             aria-hidden="true"
           />
         </span>
@@ -65,7 +65,7 @@ const label = computed(() => props.options.filter((option) => {
         leave-to-class="opacity-0"
       >
         <ListboxOptions
-          class="z-10 absolute  mt-1 max-h-40 w-full divide-y dark:divide-gray-800 overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white divide-y rounded-md shadow-lg max-h-40 dark:divide-gray-800 dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
         >
           <ListboxOption
             v-for="option in options"
@@ -75,7 +75,7 @@ const label = computed(() => props.options.filter((option) => {
             as="template"
           >
             <li
-              class="relative cursor-default select-none py-2 pl-10 pr-4" :class="[
+              class="relative py-2 pl-10 pr-4 cursor-default select-none" :class="[
                 active ? 'bg-amber-100 text-amber-900' : 'text-gray-900 dark:text-gray-300',
               ]"
             >
@@ -88,14 +88,14 @@ const label = computed(() => props.options.filter((option) => {
                 v-if="selected"
                 class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
               >
-                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                <CheckIcon class="w-5 h-5" aria-hidden="true" />
               </span>
             </li>
           </ListboxOption>
         </ListboxOptions>
       </transition>
 
-      <div v-if="error" class="text-sm text-red-500 mt-1">
+      <div v-if="error" class="mt-1 text-sm text-red-500">
         {{ error }}
       </div>
     </div>

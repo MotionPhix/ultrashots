@@ -25,7 +25,7 @@ Route::group(
   Route::post(
     '/store',
     \App\Http\Controllers\Contact\Store::class
-  )->middleware(HandlePrecognitiveRequests::class)->name('contacts.store');
+  )->name('contacts.store');
 
   Route::get(
     '/create',

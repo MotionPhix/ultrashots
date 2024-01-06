@@ -17,9 +17,9 @@ function close() {
   <ToastList />
 
   <article
-    class="fixed top-5 right-8 z-50 gap-4 flex items-center justify-centers">
+    class="fixed z-50 flex items-center gap-4 top-5 right-5 justify-centers">
     <button
-      class="hover:opacity-70 bg-lime-500 rounded p-1 flex md:hidden transition duration-300 items-center justify-center"
+      class="flex items-center justify-center p-1 transition duration-300 rounded hover:opacity-70 bg-lime-500 md:hidden"
       value="Close sidebar" @click="open = !open"
       type="button"
     >
@@ -31,7 +31,7 @@ function close() {
 
     <UseDark v-slot="{ isDark, toggleDark }">
       <button
-        class="hover:opacity-70 dark:text-white text-gray-700"
+        class="text-gray-700 hover:opacity-70 dark:text-white"
         @click="toggleDark()">
         <IconSun v-if="isDark" />
         <IconMoon v-else />
@@ -44,7 +44,7 @@ function close() {
     <SideBar :sidebarOpened="open" @close="close" />
 
     <section
-      class="flex-1 h-screen bg-gray-100 dark:bg-gray-800 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-800 scrollbar-track-gray-100">
+      class="flex-1 h-screen overflow-y-auto bg-gray-100 dark:bg-gray-800 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-800 scrollbar-track-gray-100">
 
       <main>
         <slot />

@@ -55,7 +55,7 @@ function onAddressRemove(index) {
 
     <section class="grid grid-cols-2 gap-6">
 
-      <div>
+      <div class="col-span-2 md:col-span-1">
         <input
           v-model="address.street"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
@@ -66,7 +66,7 @@ function onAddressRemove(index) {
         <InputError :message="page.props.errors[`addresses.${idx}.street`]" />
       </div>
 
-      <div>
+      <div class="col-span-2 md:col-span-1">
         <input
           v-model="address.city"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"

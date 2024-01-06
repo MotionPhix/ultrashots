@@ -4,13 +4,13 @@ import { defineStore } from 'pinia'
 import { reactive, ref, toRefs } from 'vue'
 
 interface ContactState {
-  selectedContacts: string[]
+  selectedContacts: (string|undefined)[]
   baseGroup: ContactsData
 }
 
 export const useContactStore = defineStore('contacts', () => {
   const state: ContactState = reactive({
-    selectedContacts: ref([]),
+    selectedContacts: ref<(string|undefined)[]>([]),
     baseGroup: ref(),
   })
 
@@ -66,12 +66,12 @@ export const useContactStore = defineStore('contacts', () => {
     state.baseGroup = base
   }
 
-  function setSelectedContacts(contact: string) {
+  function setSelectedContacts(contact: string | undefined) {
     state.selectedContacts.push(contact)
   }
 
-  function unsetSelectedContacts(contact: string) {
-    state.selectedContacts = state.selectedContacts.filter(activeId => activeId !== contact)
+  function unsetSelectedContacts(contact: string | undefined) {
+    state.selectedContacts = (state.selectedContacts.filter(activeId => activeId !== contact))
   }
 
   function expungeSelectedContacts() {

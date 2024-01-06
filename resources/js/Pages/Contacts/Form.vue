@@ -7,7 +7,7 @@ import PhoneRepeater from '@/Components/PhoneRepeater.vue'
 import TipTap from '@/Components/TipTap.vue'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { useFieldStore } from '@/Stores/fieldStore'
-import type { Contact } from '@/types'
+import type { Address, Company, Contact, Email, Phone } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Head, Link, router, useForm } from '@inertiajs/vue3'
 import { IconPlus } from '@tabler/icons-vue'
@@ -15,6 +15,19 @@ import axios from 'axios'
 import { debounce } from 'lodash'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+
+interface FormData {
+  first_name: string;
+  last_name: string;
+  middle_name?: string;
+  nickname?: string;
+  bio?: string;
+  title?: string;
+  phones?: Phone[];
+  emails?: Email[];
+  company?: Company;
+  addresses?: Address[];
+}
 
 const props = defineProps<{
   contact: Contact
@@ -24,7 +37,7 @@ defineOptions({
   layout: AuthenticatedLayout,
 })
 
-const message = ref(null)
+const message = ref()
 
 const fieldStore = useFieldStore()
 
@@ -65,12 +78,12 @@ const loadCompanies = debounce((query: string, setOptions: any) => {
   axios.get(query ? `/companies/${query}` : '/companies')
     .then((resp) => {
       setOptions(
-        resp.data.map(company => company),
+        resp.data.map((company: Company) => company),
       )
     })
 }, 500)
 
-function createCompany(option, setSelected) {
+function createCompany(option: Partial<{ label?: string }>, setSelected: Function) {
   axios.post('/companies', {
     name: option.label,
   }, {
@@ -90,11 +103,11 @@ function createCompany(option, setSelected) {
 }
 
 function onSubmit() {
-  const formData = {
+  const formData: FormData = {
     first_name: form.first_name,
     last_name: form.last_name,
     phones: form.phones,
-    emails: form.emails,
+    emails: form.emails
   }
 
   // Include optional fields only if they are filled
@@ -111,11 +124,11 @@ function onSubmit() {
     formData.bio = form.bio
 
   if (
-    form.addresses[0].id
-    || form.addresses[0].street
+    form.addresses && (form.addresses[0].id
+    || form?.addresses[0].street
     || form.addresses[0].city
     || form.addresses[0].state
-    || form.addresses[0].country
+    || form.addresses[0].country)
   )
     formData.addresses = form.addresses
 
@@ -141,11 +154,11 @@ function onSubmit() {
   }
 
   if (props.contact.cid) {
-    router.patch(route('contacts.update', props.contact.cid), formData, { preserveScroll: true })
+    router.patch(route('contacts.update', props.contact.cid), formData as any, { preserveScroll: true })
     return
   }
 
-  router.post(route('contacts.store'), formData, { preserveScroll: true })
+  router.post(route('contacts.store'), formData as any, { preserveScroll: true })
 }
 </script>
 
@@ -153,7 +166,7 @@ function onSubmit() {
   <Head :title="contact.cid ? `Edit ${contact.first_name} ${contact.last_name}` : 'Create new contact'" />
 
   <form
-    class="flex flex-col max-w-2xl gap-6 mx-8 my-16 mb-4 md:mx-auto"
+    class="flex flex-col max-w-2xl gap-6 px-4 pb-16 my-16 mb-4 sm:pb-0 sm:px-8 md:mx-auto"
     @submit.prevent="onSubmit"
   >
     <section class="flex gap-6">
