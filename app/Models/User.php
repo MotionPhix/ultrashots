@@ -6,17 +6,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-  use HasApiTokens, HasFactory, Notifiable;
+  use HasApiTokens, HasFactory, Notifiable, HasRoles, InteractsWithMedia;
 
   /**
    * The attributes that are mass assignable.
@@ -26,6 +26,7 @@ class User extends Authenticatable
   protected $fillable = [
     'first_name',
     'last_name',
+    'banned',
     'email',
     'password',
   ];
@@ -47,16 +48,12 @@ class User extends Authenticatable
    */
   protected $casts = [
     'email_verified_at' => 'datetime',
+    'banned' => 'boolean',
   ];
 
-  public function contacts(): HasMany
+  public function company(): BelongsTo
   {
-    return $this->hasMany(\App\Models\Contact::class);
-  }
-
-  public function images(): MorphMany
-  {
-    return $this->morphMany(Image::class, 'imageable');
+    return $this->belongsTo(Company::class);
   }
 
   protected function fullName(): Attribute
@@ -68,9 +65,15 @@ class User extends Authenticatable
 
   public function avatarUrl()
   {
-    return count($this->images)
-      ? Storage::disk('avatars')->url($this->images->random()->path)
-      : 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email)));
+    // Check if the user has an avatar in the media library
+    $media = $this->getFirstMedia('avatars');
+
+    if ($media) {
+      return $media->getUrl(); // Get the URL for the avatar image
+    }
+
+    // Fallback to Gravatar if no avatar is found
+    return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email)));
   }
 
   protected static function boot()
@@ -78,7 +81,19 @@ class User extends Authenticatable
     parent::boot();
 
     static::creating(function ($user) {
+
       $user->uid = Str::orderedUuid();
+
+    });
+
+    static::created(function ($user) {
+
+      if (User::count() === 1) {
+
+        $user->assignRole('Super Admin');
+
+      }
+
     });
   }
 }

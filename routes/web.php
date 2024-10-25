@@ -77,40 +77,40 @@ Route::group(
 
   });
 
-  Route::group(
-    ['prefix' => 'tags'], function () {
+  // Route::group(
+  //   ['prefix' => 'tags'], function () {
 
-    Route::get(
-      '/',
-      \App\Http\Controllers\Tag\Index::class
-    )->name('tags.index');
+  //   Route::get(
+  //     '/',
+  //     \App\Http\Controllers\Tag\Index::class
+  //   )->name('tags.index');
 
-    Route::post(
-      '/{contact:cid}',
-      \App\Http\Controllers\Tag\Store::class
-    )->name('tags.store');
+  //   Route::post(
+  //     '/{contact:cid}',
+  //     \App\Http\Controllers\Tag\Store::class
+  //   )->name('tags.store');
 
-    Route::patch(
-      '/{contact:cid}',
-      \App\Http\Controllers\Tag\Detach::class
-    )->name('tags.detach');
+  //   Route::patch(
+  //     '/{contact:cid}',
+  //     \App\Http\Controllers\Tag\Detach::class
+  //   )->name('tags.detach');
 
-    Route::put(
-      '/{contact:cid}',
-      \App\Http\Controllers\Tag\Update::class
-    )->name('tags.update');
+  //   Route::put(
+  //     '/{contact:cid}',
+  //     \App\Http\Controllers\Tag\Update::class
+  //   )->name('tags.update');
 
-    Route::delete(
-      'delete/{tag:name}',
-      \App\Http\Controllers\Tag\Trash::class
-    )->name('tags.destroy');
+  //   Route::delete(
+  //     'delete/{tag:name}',
+  //     \App\Http\Controllers\Tag\Trash::class
+  //   )->name('tags.destroy');
 
-    Route::get(
-      '/{filter}',
-      \App\Http\Controllers\Tag\Filtered::class
-    )->name('tags.filter');
+  //   Route::get(
+  //     '/{filter}',
+  //     \App\Http\Controllers\Tag\Filtered::class
+  //   )->name('tags.filter');
 
-  });
+  // });
 
   Route::get(
     'search/{term?}',

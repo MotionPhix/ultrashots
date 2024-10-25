@@ -18,7 +18,7 @@ class CompanyFactory extends Factory
   {
     return [
       'name' => fake('en_ZA')->company,
-      'address' => fake('en_ZA')->streetAddress
+      'banned' => fake()->randomElement([true, false]),
     ];
   }
 

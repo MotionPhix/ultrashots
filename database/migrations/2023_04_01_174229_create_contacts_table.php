@@ -19,10 +19,9 @@ return new class extends Migration
       $table->string('last_name', 50)->nullable();
       $table->string('title', 10)->nullable();
       $table->string('middle_name', 50)->nullable();
-      $table->string('nickname', 50)->nullable();
       $table->text('bio')->nullable();
 
-      $table->foreignId('user_id')->index()->constrained('users');
+      $table->foreignId('company_id')->index()->constrained('companies')->cascadeOnDelete();
 
       $table->timestamps();
     });

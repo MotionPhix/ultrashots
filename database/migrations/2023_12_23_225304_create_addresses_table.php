@@ -20,7 +20,7 @@ return new class extends Migration
       $table->string('city');
       $table->string('state');
       $table->string('country');
-      $table->morphs('addressable');
+      $table->morphs('model');
       $table->timestamps();
     });
   }

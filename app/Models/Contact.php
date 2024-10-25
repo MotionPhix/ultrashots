@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 
@@ -32,64 +33,18 @@ class Contact extends Model
   protected $casts = [
     'created_at' => 'date:d m, Y',
     'deleted_at' => 'date:d M, Y',
-    'last_interaction' => 'datetime',
   ];
 
-  protected $appends = ['last_email', 'last_company'];
+  protected $appends = ['last_email', 'last_phone'];
 
-  public function companies(): BelongsToMany
+  public function company(): BelongsTo
   {
-    return $this->belongsToMany(Company::class)
-      ->withPivot(['job_title', 'department'])
-      ->withTimestamps();
+    return $this->belongsTo(Company::class);
   }
 
-  public function Groups()
+  public function Groups(): BelongsToMany
   {
-    return $this->belongsToMany(Group::class);
-  }
-
-  public function interactions(): HasMany
-  {
-    return $this->hasMany(Interaction::class);
-  }
-
-  public function interaction(): HasOne
-  {
-    return $this->hasOne(Interaction::class, 'id', 'last_interaction_id');
-  }
-
-  public function scopeWithLastInteractionDate($query)
-  {
-    $subQuery = \DB::table('interactions')
-      ->select('created_at')
-      ->whereRaw('contact_id = contacts.id')
-      ->latest()
-      ->limit(1);
-
-    return $query->select('contacts.*')->selectSub($subQuery, 'last_interaction_date');
-  }
-
-  public function scopeWithLastInteractionType($query)
-  {
-    $subQuery = \DB::table('interactions')
-      ->select('type')
-      ->whereRaw('contact_id = contacts.id')
-      ->latest()
-      ->limit(1);
-
-    return $query->select('contacts.*')->selectSub($subQuery, 'last_interaction_type');
-  }
-
-  public function scopeWithLastInteraction($query)
-  {
-    $subQuery = \DB::table('interactions')
-      ->select('id')
-      ->whereRaw('contact_id', 'contacts.id')
-      ->latest()
-      ->limit(1);
-
-    return $query->select('contacts.*')->selectSub($subQuery, 'last_interaction_id')->with('lastInteraction');
+    return $this->belongsToMany(Group::class, 'contact_group');
   }
 
   protected function fullName(): Attribute
@@ -101,22 +56,17 @@ class Contact extends Model
 
   public function addresses(): MorphMany
   {
-    return $this->morphMany(Address::class, 'addressable');
-  }
-
-  public function user(): BelongsTo
-  {
-    return $this->belongsTo(User::class);
+    return $this->morphMany(Address::class, 'model');
   }
 
   public function phones(): MorphMany
   {
-    return $this->morphMany(Phone::class, 'phoneable');
+    return $this->morphMany(Phone::class, 'model');
   }
 
   public function emails(): MorphMany
   {
-    return $this->morphMany(Email::class, 'emailable');
+    return $this->morphMany(Email::class, 'model');
   }
 
   public function lastEmail(): Attribute
@@ -126,32 +76,30 @@ class Contact extends Model
     );
   }
 
-  public function lastCompany(): Attribute
+  public function lastPhone(): Attribute
   {
     return Attribute::make(
-      get: fn ($value) => $this->companies()->latest()->first()
+      get: fn ($value) => $this->phones()->latest()->first()
     );
   }
 
-  public function scopeOrderByName($query)
+  public function scopeOrderByName($query): Builder
   {
-    $query->orderBy('first_name')->orderBy('last_name');
+    return $query->orderBy('first_name')->orderBy('last_name');
   }
 
-  public function scopeOrderByCompany($query)
+  public function scopeOrderByCompany($query): Builder
   {
-    $query->join('companies', 'companies.id', '=', 'contacts.company_id')->orderBy('companies.name');
+    return $query->join('companies', 'companies.id', '=', 'contacts.company_id')->orderBy('companies.name');
   }
 
-  public function scopeOrderByField($query, $field)
+  public function scopeOrderByField($query, $field): Builder
   {
     if ($field === 'name') {
-      $query->orderByName();
-    } elseif ($field === 'company') {
-      $query->orderByCompany();
-    } elseif ($field === 'last_interaction') {
-      $query->orderByLastInteractionDate();
+      return $query->orderByName();
     }
+
+    return $query->orderByCompany();
   }
 
   protected static function boot()
@@ -160,7 +108,10 @@ class Contact extends Model
 
     static::creating(function ($contact) {
       $contact->cid = Str::orderedUuid();
-      $contact->user_id = auth()->user()->id;
+
+      if (auth()->check() && auth()->user()->company) {
+        $contact->company_id = auth()->user()->company->id;
+      }
     });
 
     static::updating(function ($contact) {
@@ -172,9 +123,8 @@ class Contact extends Model
     static::forceDeleting(function ($contact) {
       $contact->phones()->delete();
       $contact->emails()->delete();
-      $contact->tags()->each(fn ($tag) => $tag->delete());
       $contact->addresses()->delete();
-      $contact->companies()->delete();
+      $contact->tags()->each(fn ($tag) => $tag->delete());
     });
   }
 }

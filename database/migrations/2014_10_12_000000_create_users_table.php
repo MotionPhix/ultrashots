@@ -15,14 +15,25 @@ return new class extends Migration
   {
     Schema::create('users', function (Blueprint $table) {
       $table->id();
+
       $table->uuid('uid');
+
       $table->string('first_name');
+
       $table->string('last_name');
+
+      $table->boolean('banned')->default(false);
+
       $table->string('email')->unique();
+
       $table->timestamp('email_verified_at')->nullable();
-      $table->string('avatar')->nullable();
+
       $table->string('password');
+
       $table->rememberToken();
+
+      $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+
       $table->timestamps();
     });
   }

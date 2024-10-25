@@ -18,8 +18,10 @@ class UserFactory extends Factory
   public function definition()
   {
     return [
-      'name' => fake('en_ZA')->name(),
-      'email' => 'ultra@shots.io', // fake('en_ZA')->unique()->companyEmail,
+      'first_name' => fake('en_ZA')->firstName(),
+      'last_name' => fake('en_ZA')->lastName(),
+      'email' => fake('en_ZA')->unique()->companyEmail,
+      'banned' => fake()->randomElement([true, false]),
       'email_verified_at' => now(),
       'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
       'remember_token' => Str::random(10),

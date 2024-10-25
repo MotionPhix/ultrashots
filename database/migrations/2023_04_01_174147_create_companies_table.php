@@ -16,11 +16,13 @@ return new class extends Migration
     Schema::create('companies', function (Blueprint $table) {
       $table->id();
 
+      $table->uuid('fid')->nullable();
+
       $table->string('name', 50)->unique();
       $table->string('slogan', 255)->nullable();
-      $table->text('address')->nullable();
       $table->string('url')->nullable();
       $table->string('slug');
+      $table->boolean('banned')->default(false);
 
       $table->timestamps();
     });
