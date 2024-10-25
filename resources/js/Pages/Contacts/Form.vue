@@ -10,6 +10,7 @@ import { useFieldStore } from '@/Stores/fieldStore'
 import type { Address, Company, Contact, Email, Phone } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Head, Link, router, useForm } from '@inertiajs/vue3'
+import MazInput from "maz-ui/components/MazInput"
 import { IconPlus } from '@tabler/icons-vue'
 import axios from 'axios'
 import { debounce } from 'lodash'
@@ -18,15 +19,13 @@ import { ref } from 'vue'
 
 interface FormData {
   first_name: string;
-  last_name: string;
+  last_name?: string;
   middle_name?: string;
-  nickname?: string;
   bio?: string;
-  title?: string;
+  job_title?: string;
   phones?: Phone[];
   emails?: Email[];
   company?: Company;
-  addresses?: Address[];
 }
 
 const props = defineProps<{
@@ -43,12 +42,8 @@ const fieldStore = useFieldStore()
 
 const {
   hasMiddleName,
-  hasNickname,
-  hasTitle,
   hasJobTitle,
-  hasLocation,
-  hasDepartment,
-  hasAddresses,
+  hasAddress,
   hasSlogan,
   hasUrl,
 } = storeToRefs(fieldStore)
@@ -60,18 +55,14 @@ const form = useForm({
   last_name: props.contact.last_name,
   bio: props.contact.bio ?? '',
   middle_name: props.contact.middle_name,
-  title: props.contact.title,
-  nickname: props.contact.nickname,
+  job_title: props.contact.job_title,
   emails: props.contact.emails,
   phones: props.contact.phones,
-  addresses: props.contact.addresses,
   company_id: props.contact.company?.id,
-  company_job_title: props.contact.company?.job_title,
   company_address: props.contact.company?.address,
   company_name: props.contact.company?.name,
   company_slogan: props.contact.company?.slogan,
   company_url: props.contact.company?.url,
-  company_department: props.contact.company?.department,
 })
 
 const loadCompanies = debounce((query: string, setOptions: any) => {
@@ -103,6 +94,7 @@ function createCompany(option: Partial<{ label?: string }>, setSelected: Functio
 }
 
 function onSubmit() {
+
   const formData: FormData = {
     first_name: form.first_name,
     last_name: form.last_name,
@@ -111,26 +103,14 @@ function onSubmit() {
   }
 
   // Include optional fields only if they are filled
-  if (hasTitle.value || !!form.title)
-    formData.title = form.title
+  if (hasJobTitle.value || !!form.job_title)
+    formData.job_title = form.job_title
 
   if (hasMiddleName.value || !!form.middle_name)
     formData.middle_name = form.middle_name
 
-  if (hasNickname.value || !!form.nickname)
-    formData.nickname = form.nickname
-
   if (form.bio?.length || !!form.bio?.charAt(5))
     formData.bio = form.bio
-
-  if (
-    form.addresses && (form.addresses[0].id
-    || form?.addresses[0].street
-    || form.addresses[0].city
-    || form.addresses[0].state
-    || form.addresses[0].country)
-  )
-    formData.addresses = form.addresses
 
   if (form.company_id?.value) {
     formData.company = {
@@ -143,14 +123,8 @@ function onSubmit() {
     if (hasUrl.value || !!form.company_url)
       formData.company.url = form.company_url
 
-    if (hasDepartment.value || !!form.company_department)
-      formData.company.department = form.company_department
-
-    if (hasLocation.value || !!form.company_address)
+    if (hasAddress.value || !!form.company_address)
       formData.company.address = form.company_address
-
-    if (hasJobTitle.value || !!form.company_job_title)
-      formData.company.job_title = form.company_job_title
   }
 
   if (props.contact.cid) {
@@ -170,43 +144,38 @@ function onSubmit() {
     @submit.prevent="onSubmit"
   >
     <section class="flex gap-6">
-      <div v-if="hasTitle || !!form.title">
-        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Title
-        </label>
-        <input
-          id="title" v-model="form.title" type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-          placeholder="Dr., Mr., Mrs.,"
-        >
-
-        <InputError :message="$page.props.errors.title" />
-      </div>
 
       <div class="flex-1">
         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           First name
         </label>
 
-        <input
-          id="name" v-model="form.first_name" type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
+        <MazInput
+          id="name"
+          v-model="form.first_name" type="text"
           placeholder="Enter first name"
-        >
+          rounded-size="md"
+          size="lg"
+          block
+        />
 
         <InputError :message="$page.props.errors.first_name" />
       </div>
+
     </section>
 
     <div v-if="hasMiddleName || !!form.middle_name">
       <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         Middle name
       </label>
-      <input
+
+      <MazInput
         id="middle_name" v-model="form.middle_name" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
         placeholder="Enter middle name"
-      >
+        rounded-size="md"
+        size="lg"
+        block
+      />
 
       <InputError :message="$page.props.errors.middle_name" />
     </div>
@@ -216,78 +185,31 @@ function onSubmit() {
         Surname
       </label>
 
-      <input
+      <MazInput
         id="last_name" v-model="form.last_name" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
         placeholder="Type surname"
-      >
+        rounded-size="md"
+        size="lg"
+        block
+      />
 
       <InputError :message="$page.props.errors.last_name" />
     </div>
 
-    <div v-if="hasNickname || !!form.nickname">
-      <label for="nickname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        Nickname
+    <div v-if="hasJobTitle || !!form.job_title">
+      <label for="job_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        Job title
       </label>
 
-      <input
-        id="nickname" v-model="form.nickname" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter nickname"
-      >
+      <MazInput
+        id="job_title" v-model="form.job_title" type="text"
+        placeholder="Enter job title"
+        rounded-size="md"
+        size="lg"
+        block
+      />
 
-      <InputError :message="$page.props.errors.nickname" />
-    </div>
-
-    <div v-if="fieldStore.showTag">
-      <Menu as="div" class="relative z-10 inline-flex">
-        <MenuButton
-          class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" stroke-width="2"
-            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 5l0 14" />
-            <path d="M5 12l14 0" />
-          </svg>
-          <span>Add field</span>
-        </MenuButton>
-
-        <transition
-          enter-active-class="transition duration-100 ease-out transform"
-          enter-from-class="scale-90 opacity-0"
-          enter-to-class="scale-100 opacity-100"
-          leave-active-class="transition duration-100 ease-in transform"
-          leave-from-class="scale-100 opacity-100"
-          leave-to-class="scale-90 opacity-0"
-        >
-          <MenuItems
-            class="absolute left-0 w-48 mt-2 overflow-hidden origin-top-left bg-white border rounded-md shadow-lg focus:outline-none"
-          >
-            <MenuItem
-              v-slot="{ active }"
-              @click="toggleField('hasTitle')"
-            >
-              <span
-                :class="{ 'bg-gray-100': active }"
-                class="block px-4 py-2 text-sm text-gray-700"
-              >
-                Title
-              </span>
-            </MenuItem>
-
-            <MenuItem v-slot="{ active }" @click="toggleField('hasMiddleName')">
-              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Middle name</span>
-            </MenuItem>
-
-            <MenuItem v-slot="{ active }" @click="toggleField('hasNickname')">
-              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Nick name</span>
-            </MenuItem>
-          </MenuItems>
-        </transition>
-      </Menu>
+      <InputError :message="$page.props.errors['job_title']" />
     </div>
 
     <div>
@@ -296,10 +218,6 @@ function onSubmit() {
 
     <div>
       <PhoneRepeater v-model="form.phones" />
-    </div>
-
-    <div v-if="hasAddresses || !!form.addresses">
-      <AddressRepeater v-model="form.addresses" />
     </div>
 
     <div>
@@ -314,44 +232,13 @@ function onSubmit() {
       <InputError :message="$page.props.errors['company.id']" />
     </div>
 
-    <div v-if="hasJobTitle || !!form.company_job_title">
-      <label for="job_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        Job title
-      </label>
+    <div v-if="hasAddress || !!form.company_address">
 
-      <input
-        id="job_title" v-model="form.company_job_title" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter job title"
-      >
-
-      <InputError :message="$page.props.errors['company.job_title']" />
-    </div>
-
-    <div v-if="hasDepartment || !!form.company_department">
-      <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        Department
-      </label>
-
-      <input
-        id="department" v-model="form.company_department" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter department name"
-      >
-
-      <InputError :message="$page.props.errors['company.department']" />
-    </div>
-
-    <div v-if="hasLocation || !!form.company_address">
       <label for="company_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         Address
       </label>
 
-      <input
-        id="company_address" v-model="form.company_address" type="text"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-        placeholder="Enter work address"
-      >
+      <AddressRepeater v-model="form.company_address" />
 
       <InputError :message="$page.props.errors['company.address']" />
     </div>
@@ -405,11 +292,7 @@ function onSubmit() {
               <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Job title</span>
             </MenuItem>
 
-            <MenuItem v-slot="{ active }" @click="hasDepartment = !hasDepartment">
-              <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Department</span>
-            </MenuItem>
-
-            <MenuItem v-slot="{ active }" @click="hasLocation = !hasLocation">
+            <MenuItem v-slot="{ active }" @click="hasAddress = !hasAddress">
               <span :class="{ 'bg-gray-100': active }" class="block px-4 py-2 text-sm text-gray-700">Office location</span>
             </MenuItem>
 

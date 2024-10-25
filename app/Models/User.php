@@ -12,6 +12,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia
@@ -63,13 +65,13 @@ class User extends Authenticatable implements HasMedia
     );
   }
 
-  public function avatarUrl()
+  public function avatarUrl(): string
   {
     // Check if the user has an avatar in the media library
     $media = $this->getFirstMedia('avatars');
 
     if ($media) {
-      return $media->getUrl(); // Get the URL for the avatar image
+      return $media->getUrl();
     }
 
     // Fallback to Gravatar if no avatar is found

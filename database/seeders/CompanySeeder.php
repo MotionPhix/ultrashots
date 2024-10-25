@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contact;
 use App\Models\Setting;
+use App\Models\Subscription;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,15 +17,27 @@ class CompanySeeder extends Seeder
    */
   public function run()
   {
+    $subscriptions = Subscription::all();
+    $paymentPlans = Subscription::pluck('id')->all();
 
-    $companies = \App\Models\Company::factory(3)->create();
+    \App\Models\Company::factory(3)->create()
+      ->each(function ($company) use($subscriptions, $paymentPlans) {
 
-    $companies->each(function ($company) {
+        Setting::setSetting($company->id, 'default_sender_email', 'no-reply@company.com');
+        Setting::setSetting($company->id, 'contact_group_default', 'Clients');
+        Setting::setSetting($company->id, 'currency', 'USD');
+        Setting::setSetting($company->id, 'url', fake()->url());
 
-      Setting::setSetting($company->id, 'payment_plan', fake()->randomElement(['Silver', 'Platinum', 'Gold']));
-      Setting::setSetting($company->id, 'url', fake()->url());
+        $company->update([
+          'subscription_id' => $subscriptions->random()->id,
+        ]);
 
-    });
+        // create a few contact for the $company
+        Contact::factory(rand(2, 5))->create([
+          'company_id' => $company->id,
+        ]);
+
+      });
 
   }
 }

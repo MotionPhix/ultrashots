@@ -36,20 +36,10 @@ return [
       'throw' => false,
     ],
 
-    'avatars' => [
+    'media' => [
       'driver' => 'local',
-      'root' => storage_path('app/avatars'),
-      'url' => env('APP_URL') . '/avatars',
-      'visibility' => 'public',
-      'throw' => false,
-    ],
-
-    'documents' => [
-      'driver' => 'local',
-      'root' => storage_path('app/documents'),
-      'url' => env('APP_URL') . '/documents',
-      'visibility' => 'public',
-      'throw' => false,
+      'root' => public_path('bucket'),
+      'url' => env('APP_URL') . '/bucket',
     ],
 
     'public' => [

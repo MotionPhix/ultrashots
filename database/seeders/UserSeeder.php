@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,27 +16,24 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    /*Schema::disableForeignKeyConstraints();
-    Schema::dropIfExists('users');
+    User::factory()->create([
+      'first_name' => 'Kingsley',
+      'last_name' => 'Motion',
+      'password' => Hash::make('run%$Ace5'),
+      'email' => 'hello@ultrashots.net',
+    ]);
 
-    Schema::create('users', function ($table) {
-      $table->id();
-      $table->string('name');
-      $table->string('email')->unique();
-      $table->timestamp('email_verified_at')->nullable();
-      $table->string('password');
-      $table->rememberToken();
-      $table->timestamps();
+    // Retrieve all company IDs
+    $companies = Company::pluck('id')->all();
+
+    User::factory(2)->make()->each(function ($user) use ($companies) {
+
+      $user->company_id = collect($companies)->random();
+
+      $user->save();
+
+      $user->assignRole('Company Admin');
+
     });
-
-    Schema::enableForeignKeyConstraints();*/
-
-    $users = \App\Models\User::factory(1)->create();
-    $roles = \App\Models\Role::pluck('id')->toArray();
-
-    foreach ($users as $user) {
-      // $user->syncRoles([$roles->random(rand(3, 5))]);
-      $user->roles()->attach(Arr::random($roles, rand(3, 5)));
-    }
   }
 }

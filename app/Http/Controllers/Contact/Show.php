@@ -10,7 +10,21 @@ class Show extends Controller
 {
   public function __invoke(Contact $contact)
   {
-    $contactsQuery = \App\Models\Contact::query()->with('companies');
+    $user = auth()->user();
+
+    if (!$user->can('manage-everything') && $contact->company_id !== $user->company_id) {
+
+      abort(403, 'Unauthorized access to this contact.');
+
+    }
+
+    $contactsQuery = \App\Models\Contact::query()->with('company');
+
+    if (!$user->can('manage-everything')) {
+
+      $contactsQuery->where('company_id', $user->company_id);
+
+    }
 
     $contacts = $contactsQuery->orderBy('first_name')->get()->groupBy(fn ($contact) => $contact->first_name[0]);
 

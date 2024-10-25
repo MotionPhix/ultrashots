@@ -14,6 +14,8 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
+      Permission::firstOrCreate(['name' => 'add users', 'guard_name' => 'web']);
+
       // Define permissions
       Permission::create(['name' => 'edit contacts']);
       Permission::create(['name' => 'delete contacts']);
@@ -43,6 +45,9 @@ class RolesAndPermissionsSeeder extends Seeder
       $emailMarketer = Role::create(['name' => 'Email Marketer']);
       $staff = Role::create(['name' => 'Staff']);
 
+      // IMPORTANT!
+      app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
       // Assign permissions to roles
       $superAdmin->givePermissionTo(Permission::all()); // All permissions
 
@@ -58,5 +63,8 @@ class RolesAndPermissionsSeeder extends Seeder
       ]);
 
       $staff->givePermissionTo(['view contacts']);
+
+      // IMPORTANT!
+      app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

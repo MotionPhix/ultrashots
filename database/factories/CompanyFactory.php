@@ -22,19 +22,4 @@ class CompanyFactory extends Factory
     ];
   }
 
-  /**
-   * Indicate that the model has many customers.
-   *
-   * @return \Illuminate\Database\Eloquent\Factories\Factory
-   */
-  /*public function hasCustomers()
-  {
-    return $this->afterCreating(function (Company $company) {
-      $contact = \App\Models\Contact::factory()->create();
-      $company->contacts()->attach($contact, [
-        'from_date' => now(),
-        'to_date' => now()->addYear(),
-      ]);
-    });
-  }*/
 }

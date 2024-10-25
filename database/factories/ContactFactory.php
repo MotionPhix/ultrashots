@@ -19,7 +19,6 @@ class ContactFactory extends Factory
     return [
       'first_name' => fake('en_ZA')->firstName(),
       'last_name' => fake('en_ZA')->lastName(),
-      'email' => fake('en_ZA')->unique()->companyEmail(),
       'company_id' => \App\Models\Company::inRandomOrder()->first()->id
     ];
   }

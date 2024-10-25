@@ -2,6 +2,7 @@
 import { usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import InputError from './InputError.vue';
+import MazInput from "maz-ui/components/MazInput";
 
 const props = defineProps({
   modelValue: {
@@ -40,19 +41,21 @@ function removeEmail(index) {
       Email address
     </label>
 
-    <input
+    <MazInput
       v-model="mail.email"
-      class="col-span-2 md:col-span-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
       placeholder="Enter email address"
+      rounded-size="md"
       type="email"
+      size="lg"
+      block
       @input:model-value="value => $emit('update:modelValue', value)"
-    >
+    />
 
     <InputError :message="page.props.errors[`emails.${idx}.email`]" />
 
     <button
       v-if="modelValue.length > 1" type="button"
-      class="absolute hidden w-4 h-4 text-gray-300 group-hover:inline-flex top-9 right-3 hover:text-rose-500"
+      class="absolute z-10 hidden size-5 text-gray-300 group-hover:inline-flex top-12 right-3 hover:text-rose-500"
       @click="removeEmail(idx)"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>

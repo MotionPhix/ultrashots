@@ -10,12 +10,8 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::create('settings', function (Blueprint $table) {
-      $table->id();
-      $table->foreignId('company_id')->constrained()->onDelete('cascade');
-      $table->string('key');
-      $table->text('value')->nullable();
-      $table->timestamps();
+    Schema::table('companies', function (Blueprint $table) {
+      $table->foreignId('subscription_id')->nullable()->constrained('subscriptions')->onDelete('set null');
     });
   }
 
@@ -24,6 +20,9 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('settings');
+    Schema::table('companies', function (Blueprint $table) {
+      $table->dropForeign(['subscription_id']);
+      $table->dropColumn('subscription_id');
+    });
   }
 };

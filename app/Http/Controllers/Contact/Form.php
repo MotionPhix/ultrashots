@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Contact;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
-// use Emargareten\InertiaModal\Modal;
 use Inertia\Inertia;
 
 class Form extends Controller
@@ -12,34 +11,32 @@ class Form extends Controller
   public function __invoke(Contact $contact = null)
   {
     if (!$contact) {
+
       $contact = new Contact([
         'id' => null,
         'cid' => null,
         'first_name' => '',
         'last_name' => '',
-        'nickname' => '',
         'middle_name' => '',
-        'title' => '',
+        'job_title' => '',
         'bio' => '',
       ]);
+
     }
 
-    $contact->load('phones', 'emails', 'addresses', 'companies');
-    $company = $contact->lastCompany;
+    $contact->load('phones', 'emails', 'addresses', 'company');
 
     // Ensure $company is an empty array if it's null
-    $companyData = $company
+    $companyData = $contact->company
       ? [
         'id' => [
-          'label' => $company->name,
-          'value' => $company->id,
+          'label' => $contact->company->name,
+          'value' => $contact->company->id,
         ],
-        'name' => $company->name,
-        'slogan' => $company->slogan,
-        'address' => $company->address,
-        'url' => $company->url,
-        'department' => $company->pivot->department,
-        'job_title' => $company->pivot->job_title,
+        'name' => $contact->company->name,
+        'slogan' => $contact->company->slogan,
+        'address' => $contact->company->address,
+        'url' => $contact->company->url,
       ]
       : [
         'id' => [
@@ -50,8 +47,6 @@ class Form extends Controller
         'slogan' => '',
         'address' => '',
         'url' => '',
-        'department' => '',
-        'job_title' => '',
       ];
 
     return Inertia::render('Contacts/Form', [
@@ -60,9 +55,8 @@ class Form extends Controller
         'cid' => $contact->cid,
         'first_name' => $contact->first_name,
         'last_name' => $contact->last_name,
-        'nickname' => $contact->nickname,
         'middle_name' => $contact->middle_name,
-        'title' => $contact->title,
+        'job_title' => $contact->job_title,
         'bio' => $contact->bio,
         'emails' => $contact->emails,
         'phones' => $contact->phones,

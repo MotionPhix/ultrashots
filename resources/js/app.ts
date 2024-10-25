@@ -2,11 +2,11 @@ import './bootstrap';
 
 import 'maz-ui/css/main.css';
 
-import '../css/app.css';
-
 import 'vfonts/Inter.css';
 
 import 'vue-touch-ripple/style.css';
+
+import '../css/app.css';
 
 import type { DefineComponent } from 'vue';
 
@@ -21,6 +21,8 @@ import { createPinia } from 'pinia';
 import VueTouchRipple from 'vue-touch-ripple';
 
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+
+import { Modal, ModalLink, renderApp } from '@inertiaui/modal-vue'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
@@ -42,7 +44,8 @@ createInertiaApp({
   title: title => `${title} | ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
+    // createApp({ render: () => h(App, props) })
+    createApp({ render: renderApp(App, props) })
       .use(pinia)
       .use(plugin)
       .use(VueTouchRipple, {
@@ -57,6 +60,8 @@ createInertiaApp({
           },
         },
       })
+      .component('UltraModal', Modal)
+      .component('UltraLink', ModalLink)
       .mount(el)
   },
   progress: {
