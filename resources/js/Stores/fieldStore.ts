@@ -4,8 +4,8 @@ import { computed, reactive, ref, toRefs } from 'vue'
 interface FiedState {
   hasMiddleName: boolean
   hasJobTitle: boolean
-  hasAddress: Boolean
-  hasSlogan: Boolean
+  hasAddress: boolean
+  hasSlogan: boolean
   hasUrl: boolean
 }
 

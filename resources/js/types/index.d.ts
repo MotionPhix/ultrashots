@@ -16,40 +16,35 @@ export interface User {
   id: number;
   first_name?: string;
   last_name?: string;
-  fullname?: string;
+  full_name?: string;
   email?: string;
+  email_verified_at?: string;
 }
 
-export interface Company {
-  id: any;
+export interface Account {
+  id?: number;
+  aid?: string;
   name?: string;
   slogan?: string;
   url?: string;
-  job_title?: string;
-  department?: string;
   address?: string;
-  pivot?: {
-    contact_id?: number;
-    company_id?: number;
-    job_title?: string;
-    department?: string;
-  };
+  user_id: number;
+  logo?: string;
 }
 
-export interface Interaction {
-  id?: number;
-  type: string;
-  topic?: string;
-  contact_id?: number;
-  user_id?: number;
-  interacted_on?: Date|string;
-  interaction_date?: Date|string;
+export interface Company {
+  id?: string|number;
+  name?: string;
+  slogan?: string;
+  url?: string;
+  address?: Address;
 }
 
 export interface Phone {
   id?: number;
   formatted?: string;
   country_code?: CountryCode;
+  is_primary_phone?: boolean;
   number?: string;
   type?: string;
 }
@@ -65,35 +60,43 @@ export interface Address {
 
 export interface Email {
   id?: number;
+  is_primary_email?: boolean;
   email?: string;
 }
 
 export interface Contact {
   id?: number;
   cid?: string;
-  title?: string;
   full_name?: string;
   first_name: string;
   last_name: string;
   middle_name?: string;
-  nickname?: string;
   job_title?: string;
   is_favorite?: boolean;
   bio?: string;
   emails?: Email[];
-  addresses?: Address[];
   phones?: Phone[];
-  user_id?: number;
+  company_id?: number;
   deleted_at?: string;
-  last_company?: Company;
-  company?: Company;
+  work?: Company;
+  last_phone?: Phone;
   last_email?: Email;
-  interactions?: Interaction[];
-  tags: Tag[];
+  tags?: Tag[];
 }
 
-export interface ContactsData {
+export interface ContactsBase {
   [group: string]: Contact[];
+}
+
+export interface Group {
+  id?: number;
+  gid?: string;
+  name?: string;
+  user_id?: number;
+  color?: string;
+  contacts_count?: number;
+  contacts?: Contact[];
+  description?: string;
 }
 
 export interface Tag {
@@ -104,8 +107,8 @@ export interface Tag {
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
   auth: {
-    user: User;
-    avatar: string,
-    role: string
+    user?: User;
+    avatar?: string,
+    role?: string
   };
 };

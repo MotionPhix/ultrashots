@@ -85,45 +85,39 @@ class Update extends Controller
       $contact->emails()->whereNotIn('id', $emailIds)->delete();
     }
 
-    if (isset($validated['addresses'])) {
+    if (isset($validated['company']['address'])) {
 
-      $addressIds = [];
+      $address = $validated['company']['address'][0];
 
-      foreach ($request->addresses as $key => $address) {
-        if (isset($address['id'])) {
-          $address_exists = Address::find($address['id']);
+      if (isset($address['id'])) {
 
-          if ($address_exists) {
-            if (
-              $address['city'] !== $address_exists->city ||
-              $address['state'] !== $address_exists->state ||
-              $address['street'] !== $address_exists->street ||
-              $address['country'] !== $address_exists->country
-            ) {
-              $address_exists->update($address);
-            }
+        $address_exists = Address::find($address['id']);
+
+        if ($address_exists) {
+
+          if (
+            $address['city'] !== $address_exists->city ||
+            $address['state'] !== $address_exists->state ||
+            $address['street'] !== $address_exists->street ||
+            $address['country'] !== $address_exists->country
+          ) {
+            $address_exists->update($address);
           }
 
-          $addressIds[] = $address['id'];
-        } else {
-
-          $new_address = new Address($address);
-          $contact->addresses()->save($new_address);
-
-          $addressIds[] = $new_address->id;
         }
+
+      } else {
+
+        $contact->company->address()->create($address);
+
       }
 
-      $contact->addresses()->whereNotIn('id', $addressIds)->delete();
     }
 
     if (isset($validated['company'])) {
 
-      $companyData = array_intersect_key($validated['company'], array_flip(['address', 'url', 'slogan']));
-      $company = Company::updateOrCreate(['id' => $validated['company']['id']], $companyData);
-
-      $pivotData = array_intersect_key($validated['company'], array_flip(['job_title', 'department']));
-      $contact->companies()->sync([$company->id => $pivotData], false);
+      $companyData = array_intersect_key($validated['company'], array_flip(['url', 'slogan']));
+      Company::updateOrCreate(['id' => $validated['company']['id']], $companyData);
 
     }
 

@@ -7,7 +7,7 @@ import { ref } from 'vue';
 
 const tabs: MazTabsBarItem[] = [
   { label: 'Overview', disabled: false },
-  { label: 'Interactions', disabled: false, },
+  { label: 'Notes', disabled: false, },
 ]
 
 const currentTab = ref(1)
@@ -15,8 +15,8 @@ const currentTab = ref(1)
 
 <template>
   <MazTabs v-model="currentTab" class="mt-8" >
-    <div class="maz-flex maz-items-center border-b pb-2">
-      <MazTabsBar :items="tabs" persistent no-elevation />
+    <div class="pb-2 border-b maz-flex maz-items-center">
+      <MazTabsBar :items="tabs" persistent no-elevation block />
     </div>
 
     <MazTabsContent>

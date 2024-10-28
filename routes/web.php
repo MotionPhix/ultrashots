@@ -1,12 +1,24 @@
 <?php
-
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
-require __DIR__ . '/auth.php';
+Route::get('/', function() {
+  return \Inertia\Inertia::render('Index', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register'),
+  ]);
+})->name('home');
 
-Route::get(
-  '/{filter?}',
-  \App\Http\Controllers\Contact\Index::class
-)->middleware('auth')->name('contacts.index');
+Route::get('/contact-us', function() {
+  return \Inertia\Inertia::render('ContactUs');
+})->name('contact.us');
+
+Route::get('/templates', function() {
+  return \Inertia\Inertia::render('Templates/Index');
+})->name('templates.starter');
+
+//Route::get(
+//  '/{filter?}',
+//  \App\Http\Controllers\Contact\Index::class
+//)->middleware('auth')->name('contacts.index');
+
+require __DIR__ . '/auth.php';

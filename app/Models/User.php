@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -76,6 +75,11 @@ class User extends Authenticatable implements HasMedia
 
     // Fallback to Gravatar if no avatar is found
     return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email)));
+  }
+
+  public function isNotBanned(): bool
+  {
+    return $this->banned !== true;
   }
 
   protected static function boot()

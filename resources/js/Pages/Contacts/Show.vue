@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import ActionMenu from '@/Components/ActionMenu.vue';
+import ActionMenu from '@/Components/ContactActionMenu.vue';
 import ContactCard from '@/Components/ContactCard.vue';
 import IconContacts from '@/Components/Icon/IconContacts.vue';
 import NavTabs from '@/Components/NavTabs.vue';
 import PrimaryButtonLink from '@/Components/PrimaryButtonLink.vue';
-import InteractionsTab from '@/Components/Tab/InteractionsTab.vue';
+import NotesTab from '@/Components/Tab/NotesTab.vue';
 import OverviewTab from '@/Components/Tab/OverviewTab.vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AuthenticatedLayout from '@/Layouts/AuthLayout.vue';
 import { useContactStore } from '@/Stores/contactStore';
 import type { Contact, ContactsData } from '@/types/index';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -121,7 +121,7 @@ defineOptions({ layout: AuthenticatedLayout })
               {{ contact.first_name + ' ' + contact.last_name }}
             </h3>
 
-            <span>{{ contact.last_company?.pivot?.job_title }}</span>
+            <span>{{ contact.job_title ?? contact.company?.name }}</span>
 
             <div class="flex items-center w-full gap-2 font-semibold sm:gap-6">
               <PrimaryButtonLink
@@ -165,7 +165,7 @@ defineOptions({ layout: AuthenticatedLayout })
 
           <template #tab_2>
 
-            <InteractionsTab :contact="contact" />
+            <NotesTab :contact="contact" />
 
           </template>
 

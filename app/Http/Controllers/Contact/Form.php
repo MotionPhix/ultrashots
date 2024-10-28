@@ -8,7 +8,7 @@ use Inertia\Inertia;
 
 class Form extends Controller
 {
-  public function __invoke(Contact $contact = null)
+  public function __invoke(Contact $contact = null, bool $modal = false)
   {
     if (!$contact) {
 
@@ -24,19 +24,34 @@ class Form extends Controller
 
     }
 
-    $contact->load('phones', 'emails', 'addresses', 'company');
+    if ($modal) {
+      return Inertia::render('Contacts/NotesForm', [
+
+        'contact' => [
+          'id' => $contact->id,
+          'cid' => $contact->cid,
+          'first_name' => $contact->first_name,
+          'last_name' => $contact->last_name,
+          'bio' => $contact->bio,
+          'company' => $contact->company->name,
+        ],
+
+      ]);
+    }
+
+    $contact->load('phones', 'emails', 'work.address');
 
     // Ensure $company is an empty array if it's null
-    $companyData = $contact->company
+    $companyData = $contact->work
       ? [
         'id' => [
-          'label' => $contact->company->name,
-          'value' => $contact->company->id,
+          'label' => $contact->work->name,
+          'value' => $contact->work->id,
         ],
-        'name' => $contact->company->name,
-        'slogan' => $contact->company->slogan,
-        'address' => $contact->company->address,
-        'url' => $contact->company->url,
+        'name' => $contact->work->name,
+        'slogan' => $contact->work->slogan,
+        'address' => $contact->work->address,
+        'url' => $contact->work->url,
       ]
       : [
         'id' => [
@@ -60,7 +75,6 @@ class Form extends Controller
         'bio' => $contact->bio,
         'emails' => $contact->emails,
         'phones' => $contact->phones,
-        'addresses' => $contact->addresses,
         'company' => $companyData,
       ],
     ]);

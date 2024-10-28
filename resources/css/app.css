@@ -43,3 +43,6 @@
   }
 }
 
+.m-select-list {
+  @apply mt-2 w-full
+}

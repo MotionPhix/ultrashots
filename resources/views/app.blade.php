@@ -8,7 +8,7 @@
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
-  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.bunny.net/css?family=dm-serif-display:400" rel="stylesheet" />
 
   <!-- Scripts -->
   @routes
@@ -16,7 +16,7 @@
   @inertiaHead
 </head>
 
-<body class="overflow-hidden font-sans antialiased">
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
   @inertia
 
   {{-- <x-responsive-helper /> --}}

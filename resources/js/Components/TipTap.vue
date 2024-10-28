@@ -4,7 +4,6 @@ IconAlignCenter,
 IconAlignLeft,
 IconAlignRight,
 IconBold,
-IconColorSwatchOff,
 IconH1,
 IconH2,
 IconH3,
@@ -32,6 +31,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import TextStyle from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
+import Strike from '@tiptap/extension-strike'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import { watch } from 'vue'
 
@@ -75,7 +75,7 @@ onMounted(() => {
 
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none p-2 shadow-sm rounded-b-md h-64 overflow-y-auto',
+        class: 'prose dark:prose-invert prose-sm sm:prose lg:prose-md mx-auto focus:outline-none p-2 scrollbar-none scroll-smooth shadow-sm rounded-b-md h-64 overflow-y-auto',
       },
     },
 
@@ -90,6 +90,7 @@ onMounted(() => {
       BulletList,
       OrderedList,
       ListItem,
+      Strike,
       Placeholder.configure({
         // placeholder: 'Write some notes …',
         // Use different placeholders depending on the node type:
@@ -106,7 +107,7 @@ onMounted(() => {
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: `text-lg ${props.modelValue.length ? 'dark:text-gray-10 text-gray-800' : 'text-gray-500'}`,
+          class: `text-lg ${props.modelValue.length ? 'dark:text-neutral-100 text-gray-800' : 'text-gray-500'}`,
         },
       }),
       Heading.configure({ levels: [2, 3, 4] }).extend({
@@ -185,32 +186,6 @@ onBeforeUnmount(() => {
         class="p-2 sm:p-0.5 bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-50 hover:opacity-75 transition duration-300 rounded-md">
         <IconIndentDecrease />
       </button>
-
-      <span class="flex-1"></span>
-
-      <button
-        @click="editor.chain().focus().setTextAlign('left').run()"
-        :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
-        class="p-2 sm:p-0.5 bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-50 hover:opacity-75 transition duration-300 rounded-md"
-        type="button">
-        <IconAlignLeft />
-      </button>
-
-      <button
-        @click="editor.chain().focus().setTextAlign('center').run()"
-        :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
-        class="p-2 sm:p-0.5 bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-50 hover:opacity-75 transition duration-300 rounded-md"
-        type="button">
-        <IconAlignCenter />
-      </button>
-
-      <button
-        @click="editor.chain().focus().setTextAlign('right').run()"
-        :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
-        class="p-2 sm:p-0.5 bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-50 hover:opacity-75 transition duration-300 rounded-md"
-        type="button">
-        <IconAlignRight/>
-      </button>
     </section>
 
     <bubble-menu
@@ -246,10 +221,31 @@ onBeforeUnmount(() => {
       </button>
 
       <button
-        type="button"
-        @click="editor.chain().focus().unsetColor().run()">
-        <IconColorSwatchOff />
+        @click="editor.chain().focus().setTextAlign('left').run()"
+        :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
+        type="button">
+        <IconAlignLeft />
       </button>
+
+      <button
+        @click="editor.chain().focus().setTextAlign('center').run()"
+        :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
+        type="button">
+        <IconAlignCenter />
+      </button>
+
+      <button
+        @click="editor.chain().focus().setTextAlign('right').run()"
+        :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
+        type="button">
+        <IconAlignRight/>
+      </button>
+
+<!--      <button-->
+<!--        type="button"-->
+<!--        @click="editor.chain().focus().unsetColor().run()">-->
+<!--        <IconColorSwatchOff />-->
+<!--      </button>-->
     </bubble-menu>
 
     <floating-menu

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import InputError from '@/Components/InputError.vue';
 import TipTap from '@/Components/TipTap.vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AuthenticatedLayout from '@/Layouts/Keep.AuthenticatedLayout.bak.txt';
 import { useContactStore } from '@/Stores/contactStore';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { IconMailFast } from '@tabler/icons-vue';

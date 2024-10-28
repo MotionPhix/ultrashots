@@ -2,7 +2,7 @@
 import type { Phone } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { usePage } from '@inertiajs/vue3'
-import { IconTrash } from '@tabler/icons-vue'
+import { IconPhoneCheck, IconTrash } from '@tabler/icons-vue'
 import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput'
 import { onMounted } from 'vue'
 import InputError from './InputError.vue'
@@ -24,6 +24,7 @@ function onPhoneAdd(phone: string) {
     number: '',
     type: phone,
     country_code: 'MW',
+    is_primary_phone: false,
   }])
 }
 
@@ -32,55 +33,74 @@ function onPhoneRemove(index: Number) {
   emit('update:modelValue', updatedEmails)
 }
 
+function togglePrimaryPhone(index: number) {
+    for (let i = 0; i < props.modelValue.length; i++) {
+        if (i === index) {
+            // Set the current phone as the primary phone
+            props.modelValue[i].is_primary_phone = true;
+        } else {
+            // Set all other phones as non-primary
+            props.modelValue[i].is_primary_phone = false;
+        }
+    }
+}
+
 onMounted(() => {
   if (props.modelValue.length <= 0) {
     emit('update:modelValue', [...props.modelValue, {
-      number: '', type: 'mobile', country_code: 'MW',
+      number: '', type: 'mobile', country_code: 'MW', is_primary_phone: true,
     }])
   }
 })
 </script>
 
 <template>
-  <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div v-for="(phone, idx) in modelValue" :key="idx" class="relative mb-4 space-y-2 group first-letter:uppercase">
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+      {{ phone.type }} phone
+    </label>
 
-    <div
-      v-for="(phone, idx) in modelValue"
-      :key="idx" class="relative mb-4 space-y-2 group first-letter:uppercase">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        {{ phone.type }} phone
-      </label>
+    <MazPhoneNumberInput
+      v-model:country-code="phone.country_code"
+      v-model="phone.number"
+      no-example
+      :only-countries="['MW', 'ZA', 'ZM', 'ZW']"
+      rounded-size="md"
+      show-code-on-list
+      no-country-selector
+      no-search
+      fetch-country
+      placeholder="Enter a phone number"
+      :class="{
+        'border-r-4 border-r-indigo-600 dark:border-r-yellow-500': phone.is_primary_phone
+      }"
+      color="success"
+      no-flags
+      block
+    />
 
-      <MazPhoneNumberInput
-        v-model:country-code="phone.country_code"
-        v-model="phone.number"
-        placeholder="Enter phone number"
-        :only-countries="['MW', 'ZA', 'ZM', 'ZW']"
-        show-code-on-list
-        rounded-size="md"
-        no-country-selector
-        no-example
-        fetchCountry
-        block
-        size="lg"
-        no-flags
-      />
+    <InputError :message="page.props.errors[`phones.${idx}.type`]" />
+    <InputError :message="page.props.errors[`phones.${idx}.number`]" />
+    <InputError :message="page.props.errors[`phones.${idx}.country_code`]" />
 
-      <InputError :message="page.props.errors[`phones.${idx}.type`]" />
-      <InputError :message="page.props.errors[`phones.${idx}.number`]" />
-      <InputError :message="page.props.errors[`phones.${idx}.country_code`]" />
-
+    <section
+      class="absolute z-30 items-center hidden h-8 gap-2 py-1 rounded-lg top-9 group-hover:inline-flex bottom-10 right-4">
       <button
-        v-if="modelValue.length > 1" type="button"
-        class="absolute z-10 hidden size-5 text-gray-500 dark:text-gray-300 group-hover:inline-flex top-12 right-3 hover:text-rose-500"
-        @click="onPhoneRemove(idx)"
-      >
-        <IconTrash class="w-5 h-5 stroke-current" />
+        type="button"
+        @click="togglePrimaryPhone(idx)"
+        class="text-gray-500 dark:text-gray-300 hover:text-gray-900 hover:bg-opacity-10">
+        <IconPhoneCheck class="w-5 h-5 transition duration-300 hover:text-lime-500" />
       </button>
 
-    </div>
+      <button
+          v-if="props.modelValue.length > 1" type="button"
+          class="text-gray-500 dark:text-gray-300 group-hover:inline-flex"
+          @click="onPhoneRemove(idx)">
+          <IconTrash class="w-5 h-5 transition duration-300 stroke-current hover:text-rose-500" />
+      </button>
+    </section>
 
-  </section>
+  </div>
 
   <div>
     <Menu as="div" class="relative inline-flex">

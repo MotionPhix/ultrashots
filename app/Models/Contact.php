@@ -21,11 +21,10 @@ class Contact extends Model
     'first_name',
     'last_name',
     'bio',
-    'title',
+    'job_title',
     'middle_name',
     'is_favorite',
     'user_id',
-    'nickname'
   ];
 
   protected $casts = [
@@ -37,7 +36,12 @@ class Contact extends Model
 
   public function company(): BelongsTo
   {
-    return $this->belongsTo(Company::class);
+    return $this->belongsTo(Company::class, 'company_id');
+  }
+
+  public function work(): BelongsTo
+  {
+    return $this->belongsTo(Company::class, 'real_company_id');
   }
 
   public function Groups(): BelongsToMany
@@ -50,11 +54,6 @@ class Contact extends Model
     return Attribute::make(
       get: fn ($value) => $this->first_name . ' ' . $this->last_name
     );
-  }
-
-  public function addresses(): MorphMany
-  {
-    return $this->morphMany(Address::class, 'model');
   }
 
   public function phones(): MorphMany
@@ -70,14 +69,14 @@ class Contact extends Model
   public function lastEmail(): Attribute
   {
     return Attribute::make(
-      get: fn ($value) => $this->emails()->latest()->first()
+      get: fn ($value) => $this->emails()->latest()->first(['id', 'email'])
     );
   }
 
   public function lastPhone(): Attribute
   {
     return Attribute::make(
-      get: fn ($value) => $this->phones()->latest()->first()
+      get: fn ($value) => $this->phones()->latest()->first(['id', 'type', 'number'])
     );
   }
 

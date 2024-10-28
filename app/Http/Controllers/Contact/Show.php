@@ -32,7 +32,13 @@ class Show extends Controller
 
     return Inertia::render('Contacts/Show', [
       'baseGroup' => $contactsArray,
-      'contact' => $contact->load('phones', 'emails', 'addresses', 'tags'),
+      'contact' => $contact->load(
+        'phones:id,model_id,type,number,formatted',
+        'emails:id,model_id,email',
+        'work:id,name,url,slogan',
+        'work.address:id,model_id,street,city,state,country',
+        'tags'
+      ),
     ]);
   }
 }

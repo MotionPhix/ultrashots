@@ -1,27 +1,25 @@
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'
+<script setup>
+import { onMounted, ref } from 'vue';
 
-defineProps<{
-  modelValue: string
-}>()
+const model = defineModel({
+  type: String,
+  required: true,
+});
 
-defineEmits(['update:modelValue'])
-
-const input = ref<HTMLInputElement | null>(null)
+const input = ref(null);
 
 onMounted(() => {
-  if (input.value?.hasAttribute('autofocus'))
-    input.value?.focus()
-})
+  if (input.value.hasAttribute('autofocus')) {
+    input.value.focus();
+  }
+});
 
-defineExpose({ focus: () => input.value?.focus() })
+defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
   <input
-    ref="input"
-    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-600 focus:border-lime-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-    :value="modelValue"
-    @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-  >
+    class="border-gray-300 w-full py-3 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-lime-500 dark:focus:border-lime-600 focus:ring-lime-500 dark:focus:ring-lime-600"
+    v-model="model"
+    ref="input" />
 </template>

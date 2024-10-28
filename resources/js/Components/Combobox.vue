@@ -95,7 +95,7 @@ function handleUpdateModelValue(selected) {
         class="relative block w-full overflow-hidden text-sm text-gray-900 border border-gray-300 rounded-lg cursor-default bg-gray-50 focus:ring-lime-600 focus:border-lime-600 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
       >
         <ComboboxInput
-          class="w-full placeholder-gray-600 dark:placeholder-gray-400 border-none bg-transparent py-2.5 pl-3 pr-10 text-sm leading-5 text-gray-900 dark:text-gray-300 focus:ring-0"
+          class="w-full placeholder-gray-600 dark:placeholder-gray-400 border-none bg-transparent py-3.5 pl-3 pr-10 text-sm leading-5 text-gray-900 dark:text-gray-300 focus:ring-0"
           :display-value="option => option.label"
           placeholder="Search for companies"
           @change="query = $event.target.value"

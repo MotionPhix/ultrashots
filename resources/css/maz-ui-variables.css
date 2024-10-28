@@ -1,0 +1,115 @@
+:root {
+  --maz-color-primary-50: hsl(163, 66%, 54%);
+  --maz-color-primary-100: hsl(163, 66%, 44%);
+  --maz-color-primary-200: hsl(163, 66%, 39%);
+  --maz-color-primary-300: hsl(163, 66%, 29%);
+  --maz-color-primary-400: hsl(163, 66%, 24%);
+  --maz-color-primary-600: hsl(163, 66%, 4%);
+  --maz-color-primary-700: hsl(0, 0%, 0%);
+  --maz-color-primary-800: hsl(0, 0%, 0%);
+  --maz-color-primary-900: hsl(0, 0%, 0%);
+  --maz-color-primary: hsl(163, 66%, 14%);
+  --maz-color-primary-alpha: hsla(163, 66%, 14%, 0.6);
+  --maz-color-primary-alpha-20: hsla(163, 66%, 14%, 0.2);
+  --maz-color-primary-alpha-10: hsla(163, 66%, 14%, 0.1);
+  --maz-color-primary-alpha-05: hsla(163, 66%, 14%, 0.05);
+  --maz-color-primary-contrast: hsl(0, 0%, 100%);
+
+  --maz-color-secondary-50: hsl(32, 44%, 93%);
+  --maz-color-secondary-100: hsl(32, 44%, 83%);
+  --maz-color-secondary-200: hsl(32, 44%, 78%);
+  --maz-color-secondary-300: hsl(32, 44%, 68%);
+  --maz-color-secondary-400: hsl(32, 44%, 63%);
+  --maz-color-secondary-600: hsl(32, 44%, 43%);
+  --maz-color-secondary-700: hsl(32, 44%, 33%);
+  --maz-color-secondary-800: hsl(32, 44%, 23%);
+  --maz-color-secondary-900: hsl(32, 44%, 13%);
+  --maz-color-secondary: hsl(32, 44%, 53%);
+  --maz-color-secondary-alpha: hsla(32, 44%, 53%, 0.6);
+  --maz-color-secondary-alpha-20: hsla(32, 44%, 53%, 0.2);
+  --maz-color-secondary-alpha-10: hsla(32, 44%, 53%, 0.1);
+  --maz-color-secondary-alpha-05: hsla(32, 44%, 53%, 0.05);
+  --maz-color-secondary-contrast: hsl(0, 0%, 100%);
+
+  --maz-color-info-50: hsl(129, 17%, 91%);
+  --maz-color-info-100: hsl(129, 17%, 81%);
+  --maz-color-info-200: hsl(129, 17%, 76%);
+  --maz-color-info-300: hsl(129, 17%, 66%);
+  --maz-color-info-400: hsl(129, 17%, 61%);
+  --maz-color-info-600: hsl(129, 17%, 41%);
+  --maz-color-info-700: hsl(129, 17%, 31%);
+  --maz-color-info-800: hsl(129, 17%, 21%);
+  --maz-color-info-900: hsl(129, 17%, 11%);
+  --maz-color-info: hsl(129, 17%, 51%);
+  --maz-color-info-alpha: hsla(129, 17%, 51%, 0.6);
+  --maz-color-info-alpha-20: hsla(129, 17%, 51%, 0.2);
+  --maz-color-info-alpha-10: hsla(129, 17%, 51%, 0.1);
+  --maz-color-info-alpha-05: hsla(129, 17%, 51%, 0.05);
+  --maz-color-info-contrast: hsl(0, 0%, 100%);
+
+  --maz-color-success-50: hsl(44, 100%, 90%);
+  --maz-color-success-100: hsl(44, 100%, 80%);
+  --maz-color-success-200: hsl(44, 100%, 75%);
+  --maz-color-success-300: hsl(44, 100%, 65%);
+  --maz-color-success-400: hsl(44, 100%, 60%);
+  --maz-color-success-600: hsl(44, 100%, 40%);
+  --maz-color-success-700: hsl(44, 100%, 30%);
+  --maz-color-success-800: hsl(44, 100%, 20%);
+  --maz-color-success-900: hsl(44, 100%, 10%);
+  --maz-color-success: hsl(44, 100%, 50%);
+  --maz-color-success-alpha: hsla(44, 100%, 50%, 0.6);
+  --maz-color-success-alpha-20: hsla(44, 100%, 50%, 0.2);
+  --maz-color-success-alpha-10: hsla(44, 100%, 50%, 0.1);
+  --maz-color-success-alpha-05: hsla(44, 100%, 50%, 0.05);
+  --maz-color-success-contrast: hsl(0, 0%, 0%);
+
+  --maz-color-warning-50: hsl(44, 100%, 90%);
+  --maz-color-warning-100: hsl(44, 100%, 80%);
+  --maz-color-warning-200: hsl(44, 100%, 75%);
+  --maz-color-warning-300: hsl(44, 100%, 65%);
+  --maz-color-warning-400: hsl(44, 100%, 60%);
+  --maz-color-warning-600: hsl(44, 100%, 40%);
+  --maz-color-warning-700: hsl(44, 100%, 30%);
+  --maz-color-warning-800: hsl(44, 100%, 20%);
+  --maz-color-warning-900: hsl(44, 100%, 10%);
+  --maz-color-warning: hsl(44, 100%, 50%);
+  --maz-color-warning-alpha: hsla(44, 100%, 50%, 0.6);
+  --maz-color-warning-alpha-20: hsla(44, 100%, 50%, 0.2);
+  --maz-color-warning-alpha-10: hsla(44, 100%, 50%, 0.1);
+  --maz-color-warning-alpha-05: hsla(44, 100%, 50%, 0.05);
+  --maz-color-warning-contrast: hsl(0, 0%, 0%);
+
+  --maz-color-danger-50: hsl(32, 44%, 93%);
+  --maz-color-danger-100: hsl(32, 44%, 83%);
+  --maz-color-danger-200: hsl(32, 44%, 78%);
+  --maz-color-danger-300: hsl(32, 44%, 68%);
+  --maz-color-danger-400: hsl(32, 44%, 63%);
+  --maz-color-danger-600: hsl(32, 44%, 43%);
+  --maz-color-danger-700: hsl(32, 44%, 33%);
+  --maz-color-danger-800: hsl(32, 44%, 23%);
+  --maz-color-danger-900: hsl(32, 44%, 13%);
+  --maz-color-danger: hsl(32, 44%, 53%);
+  --maz-color-danger-alpha: hsla(32, 44%, 53%, 0.6);
+  --maz-color-danger-alpha-20: hsla(32, 44%, 53%, 0.2);
+  --maz-color-danger-alpha-10: hsla(32, 44%, 53%, 0.1);
+  --maz-color-danger-alpha-05: hsla(32, 44%, 53%, 0.05);
+  --maz-color-danger-contrast: hsl(0, 0%, 100%);
+
+  --maz-color-text-light: hsl(0, 0%, 85%);
+  --maz-color-muted-light: hsla(0, 0%, 0%, 0.54);
+  --maz-bg-color-light: hsl(36, 100%, 95%);
+  --maz-bg-color-light-light: hsl(36, 100%, 91%);
+  --maz-bg-color-light-lighter: hsl(36, 100%, 88%);
+  --maz-color-text-dark: hsl(163, 66%, 14%);
+  --maz-color-muted-dark: hsl(32, 44%, 53%);
+  --maz-bg-color-dark: hsl(129, 17%, 51%);
+  --maz-bg-color-dark-light: hsl(129, 17%, 55%);
+  --maz-bg-color-dark-lighter: hsl(129, 17%, 58%);
+  --maz-bg-overlay: hsl(0, 0%, 0%);
+  --maz-border-width: 0.125rem;
+  --maz-border-color: #BB8A52;
+  --maz-border-radius: 0.25rem;
+  --maz-font-family: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen,
+    ubuntu, cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif, system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen,
+    ubuntu, cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}

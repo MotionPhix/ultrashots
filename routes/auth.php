@@ -38,6 +38,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
 
   Route::get(
+    '/dashboard',
+    \App\Http\Controllers\Dashboard\Index::class
+  )->name('dashboard');
+
+  Route::get(
     'verify-email',
     EmailVerificationPromptController::class)
     ->name('verification.notice');
@@ -72,62 +77,71 @@ Route::middleware('auth')->group(function () {
     [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
-//    my links
+  //    my links
 
-  Route::get(
-    '/groups',
-    \App\Http\Controllers\Contact\Groups\Index::class
-  )->name('contacts.groups.index');
+  Route::group(['prefix' => 'people'], function () {
 
-  Route::get(
-    '/groups/create',
-    \App\Http\Controllers\Contact\Groups\Form::class
-  )->name('contacts.group.create');
+    Route::get(
+      '/groups',
+      \App\Http\Controllers\Contact\Groups\Index::class
+    )->name('contacts.group.index');
 
-  Route::get(
-    '/groups/{group}',
-    \App\Http\Controllers\Contact\Group::class
-  )->name('contacts.group.show');
+    Route::get(
+      '/groups/create',
+      \App\Http\Controllers\Contact\Groups\Form::class
+    )->name('contacts.group.create');
 
-  Route::post(
-    '/store',
-    \App\Http\Controllers\Contact\Store::class
-  )->name('contacts.store');
+    Route::get(
+      '/groups/{group}',
+      \App\Http\Controllers\Contact\Group::class
+    )->name('contacts.group.show');
 
-  Route::get(
-    '/create',
-    \App\Http\Controllers\Contact\Form::class
-  )->name('contacts.create');
+    Route::post(
+      '/store',
+      \App\Http\Controllers\Contact\Store::class
+    )->name('contacts.store');
 
-  Route::get(
-    '/e/{contact:cid}',
-    \App\Http\Controllers\Contact\Form::class
-  )->name('contacts.edit');
+    Route::get(
+      '/create',
+      \App\Http\Controllers\Contact\Form::class
+    )->name('contacts.create');
 
-  Route::get(
-    '/s/{contact:cid}',
-    \App\Http\Controllers\Contact\Show::class
-  )->name('contacts.show');
+    Route::get(
+      '/e/{contact:cid}/{modal?}',
+      \App\Http\Controllers\Contact\Form::class
+    )->name('contacts.edit');
 
-  Route::patch(
-    '/u/{contact:cid}',
-    \App\Http\Controllers\Contact\Update::class
-  )->name('contacts.update');
+    Route::get(
+      '/s/{contact:cid}',
+      \App\Http\Controllers\Contact\Show::class
+    )->name('contacts.show');
 
-  Route::delete(
-    '/d/{ids}',
-    \App\Http\Controllers\Contact\Trash::class
-  )->name('contacts.destroy');
+    Route::patch(
+      '/u/{contact:cid}',
+      \App\Http\Controllers\Contact\Update::class
+    )->name('contacts.update');
 
-  Route::put(
-    '/r/{ids}',
-    \App\Http\Controllers\Contact\Restore::class
-  )->name('contacts.restore');
+    Route::delete(
+      '/d/{ids}',
+      \App\Http\Controllers\Contact\Trash::class
+    )->name('contacts.destroy');
 
-  Route::patch(
-    '/f/{ids}',
-    \App\Http\Controllers\Contact\Favourite::class
-  )->name('contacts.favourite');
+    Route::put(
+      '/r/{ids}',
+      \App\Http\Controllers\Contact\Restore::class
+    )->name('contacts.restore');
+
+    Route::patch(
+      '/f/{ids}',
+      \App\Http\Controllers\Contact\Favourite::class
+    )->name('contacts.favourite');
+
+    Route::get(
+      '/{filter?}',
+      \App\Http\Controllers\Contact\Index::class
+    )->middleware('auth')->name('contacts.index');
+
+  });
 
   Route::group(
     ['prefix' => 'companies'], function () {
@@ -144,40 +158,40 @@ Route::middleware('auth')->group(function () {
 
   });
 
-  // Route::group(
-  //   ['prefix' => 'tags'], function () {
+  Route::group(
+    ['prefix' => 'tags'], function () {
 
-  //   Route::get(
-  //     '/',
-  //     \App\Http\Controllers\Tag\Index::class
-  //   )->name('tags.index');
+    Route::get(
+      '/',
+      \App\Http\Controllers\Tag\Index::class
+    )->name('tags.index');
 
-  //   Route::post(
-  //     '/{contact:cid}',
-  //     \App\Http\Controllers\Tag\Store::class
-  //   )->name('tags.store');
+    Route::post(
+      '/{contact:cid}',
+      \App\Http\Controllers\Tag\Store::class
+    )->name('tags.store');
 
-  //   Route::patch(
-  //     '/{contact:cid}',
-  //     \App\Http\Controllers\Tag\Detach::class
-  //   )->name('tags.detach');
+    Route::patch(
+      '/{contact:cid}',
+      \App\Http\Controllers\Tag\Detach::class
+    )->name('tags.detach');
 
-  //   Route::put(
-  //     '/{contact:cid}',
-  //     \App\Http\Controllers\Tag\Update::class
-  //   )->name('tags.update');
+    Route::put(
+      '/{contact:cid}',
+      \App\Http\Controllers\Tag\Update::class
+    )->name('tags.update');
 
-  //   Route::delete(
-  //     'delete/{tag:name}',
-  //     \App\Http\Controllers\Tag\Trash::class
-  //   )->name('tags.destroy');
+    Route::delete(
+      'delete/{tag:name}',
+      \App\Http\Controllers\Tag\Trash::class
+    )->name('tags.destroy');
 
-  //   Route::get(
-  //     '/{filter}',
-  //     \App\Http\Controllers\Tag\Filtered::class
-  //   )->name('tags.filter');
+    Route::get(
+      '/{filter}',
+      \App\Http\Controllers\Tag\Filtered::class
+    )->name('tags.filter');
 
-  // });
+  });
 
   Route::get(
     'search/{term?}',
@@ -194,8 +208,72 @@ Route::middleware('auth')->group(function () {
     \App\Http\Controllers\Mails\Send::class
   )->name('mail.send');
 
-  Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+  Route::group(['prefix' => 'settings'], function () {
+
+    Route::get(
+      '/profile',
+      \App\Http\Controllers\Settings\Profile\Index::class
+    )->name('settings.profile.index');
+
+    Route::patch(
+      '/profile',
+      \App\Http\Controllers\Settings\Profile\Update::class
+    )->name('settings.profile.update');
+
+    Route::delete(
+      '/profile',
+      [\App\Http\Controllers\ProfileController::class, 'destroy']
+    )->name('settings.profile.destroy');
+
+    Route::get(
+      '/account',
+      \App\Http\Controllers\Settings\Account\Index::class
+    )->name('settings.account.index');
+
+    Route::patch(
+      '/account',
+      \App\Http\Controllers\Settings\Account\Update::class
+    )->name('settings.account.update');
+
+  });
+
+  Route::group(['prefix' => 'groups'], function () {
+
+    Route::get(
+      '/g/i',
+      \App\Http\Controllers\Groups\Index::class
+    )->name('groups.index');
+
+    Route::post(
+      '/g/store',
+      \App\Http\Controllers\Groups\Store::class
+    )->name('groups.store');
+
+    Route::patch(
+      '/g/update/{group:gid}',
+      \App\Http\Controllers\Groups\Update::class
+    )->name('groups.update');
+
+    Route::get(
+      '/g/s/{group:gid}',
+      \App\Http\Controllers\Groups\Show::class
+    )->name('groups.show');
+
+    Route::post(
+      '/g/add/{group:gid}',
+      \App\Http\Controllers\Groups\Add::class
+    )->name('groups.add');
+
+    Route::post(
+      '/g/remove/{group:gid}',
+      \App\Http\Controllers\Groups\Remove::class
+    )->name('groups.remove');
+
+    Route::delete(
+      '/g/delete',
+      \App\Http\Controllers\Groups\Trash::class
+    )->name('groups.destroy');
+
+  });
 
 });

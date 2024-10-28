@@ -2,11 +2,15 @@ import './bootstrap';
 
 import 'maz-ui/css/main.css';
 
+// import '../css/maz-ui-variables.css'
+
 import 'vfonts/Inter.css';
 
-import 'vue-touch-ripple/style.css';
+import "vue-toastification/dist/index.css";
 
 import '../css/app.css';
+
+import 'preline'
 
 import type { DefineComponent } from 'vue';
 
@@ -24,6 +28,22 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 import { Modal, ModalLink, renderApp } from '@inertiaui/modal-vue'
 
+import MazCheckbox from "maz-ui/components/MazCheckbox"
+
+import MazSelect from "maz-ui/components/MazSelect"
+
+import MazInput from "maz-ui/components/MazInput"
+
+import MazBtn from "maz-ui/components/MazBtn"
+
+import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
+
+import MazDropdown from "maz-ui/components/MazDropdown";
+
+import MazAvatar from "maz-ui/components/MazAvatar";
+
+import Toast, { POSITION } from "vue-toastification";
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
 const pinia = createPinia()
@@ -40,6 +60,22 @@ window.addEventListener('popstate', (event) => {
   }
 });
 
+const options = {
+  icon: false,
+  position: POSITION.BOTTOM_RIGHT,
+  toastDefaults: {
+    default: {
+      // timeout: false,
+      closeButton: false,
+      newestOnTop: true,
+      draggable: false,
+      hideProgressBar: true,
+      toastClassName: "my_toast_body_class",
+      containerClassName: 'my_toast_container_ads'
+    }
+  }
+}
+
 createInertiaApp({
   title: title => `${title} | ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
@@ -48,9 +84,7 @@ createInertiaApp({
     createApp({ render: renderApp(App, props) })
       .use(pinia)
       .use(plugin)
-      .use(VueTouchRipple, {
-        duration: 200,
-      })
+      .use(Toast, options)
       .use(ZiggyVue, Ziggy)
       .mixin({
         methods: {
@@ -62,6 +96,13 @@ createInertiaApp({
       })
       .component('UltraModal', Modal)
       .component('UltraLink', ModalLink)
+      .component('UltraSelect', MazSelect)
+      .component('UltraBtn', MazBtn)
+      .component('UltraInput', MazInput)
+      .component('UltraPhoneInput', MazPhoneNumberInput)
+      .component('UltraCheckbox', MazCheckbox)
+      .component('UltraDropdown', MazDropdown)
+      .component('UltraAvatar', MazAvatar)
       .mount(el)
   },
   progress: {

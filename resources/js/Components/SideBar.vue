@@ -1,83 +1,21 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3'
+import SideBarMenu from '@/Components/SideBarMenu.vue';
+import { useMenuStore } from '@/Stores/menuStore';
+import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import { storeToRefs } from 'pinia';
 
-import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
-
-import ContactListIcon from '@/Components/Icon/IconContactList.vue'
-import ContactsIcon from '@/Components/Icon/IconContacts.vue'
-
-import ApplicationLogo from '@/Components/ApplicationLogo.vue'
-import { useTagStore } from '@/Stores/tagStore'
-import { IconStar, IconTag, IconTrash } from '@tabler/icons-vue'
-import axios from 'axios'
-import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
-
-const props = defineProps({
-  sidebarOpened: {
-    type: Boolean,
-    default: false,
-  },
-})
-
-const emit = defineEmits(['close'])
-
-const tagStore = useTagStore()
+const menuControl = useMenuStore()
 
 const {
-  tags,
-} = storeToRefs(tagStore)
+  isOpen,
+} = storeToRefs(menuControl)
 
-const { setTags } = tagStore
-
-function closeMenu() {
-  emit('close')
-}
-
-function logout() {
-  router.post('/logout')
-}
-
-const mainNavigation = [
-  {
-    href: 'contacts.index',
-    filter: 'favourites',
-    label: 'Favourites',
-    icon: IconStar,
-    active: '/favourites'
-  },
-  {
-    href: 'contacts.index',
-    label: 'All contacts',
-    icon: ContactsIcon,
-  },
-  {
-    href: 'contacts.groups.index',
-    label: 'Contact groups',
-    icon: ContactListIcon,
-    active: '/groups'
-  },
-  {
-    href: 'contacts.index',
-    filter: 'deleted',
-    label: 'Deleted',
-    icon: IconTrash,
-    active: '/deleted'
-  },
-]
-
-onMounted(() => {
-  axios
-    .get('/tags')
-    .then((feedback) => {
-      setTags(feedback.data)
-    })
-})
+const { toggleOpen } = menuControl
 </script>
 
 <template>
-  <TransitionRoot :show="sidebarOpened">
-    <Dialog as="div" class="fixed inset-0 z-40 md:hidden" @close="closeMenu">
+  <TransitionRoot :show="isOpen">
+    <Dialog as="div" class="fixed inset-0 z-40 md:hidden" @close="toggleOpen">
       <TransitionChild
         enter="transition ease-in-out duration-200 transform"
         enter-from="-translate-x-full"
@@ -90,80 +28,8 @@ onMounted(() => {
         <div
           class="relative z-10 flex flex-col border-r border-gray-200 h-dvh dark:border-r-0 w-72 bg-gray-50 dark:bg-gray-800 md:hidden">
 
-          <div class="px-4 mt-4 mb-8">
-            <Link
-              href="/"
-              as="button"
-              class="flex items-center gap-4 text-4xl font-bold dark:text-gray-200">
-              <ApplicationLogo class="w-10 h-10" /> <span>ultrashots</span>
-            </Link>
-          </div>
+          <SideBarMenu />
 
-          <div class="flex flex-col flex-1 overflow-y-auto">
-            <div class="mb-10">
-              <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                Main
-              </h3>
-
-              <Link
-                v-for="(item, index) in mainNavigation"
-                :href="item.filter ? route(item.href, item.filter) : route(item.href)"
-                class="flex items-center gap-3 px-6 py-2.5 text-gray-500 dark:text-gray-300 hover:text-lime-600 group"
-                :class="{
-                  'font-bold text-lime-600 dark:text-lime-300': item.active ? $page.url.startsWith(item.active) : $page.url === '/'
-                }"
-                @click="closeMenu"
-                :key="index"
-              >
-                <component
-                  :is="item.icon"
-                  class="w-6 h-6 group-hover:text-lime-500"
-                />
-                {{ item.label }}
-              </Link>
-            </div>
-
-            <div class="mb-10">
-              <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                Tags
-              </h3>
-
-              <Link
-                v-for="(item) in tags"
-                :href="route('tags.filter', item?.label)"
-                class="flex items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
-                :class="{
-                  'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.label}`)
-                }"
-                :key="item.value"
-                preserve-scroll
-              >
-                <IconTag
-                  class="w-5 h-5 mr-2 text-gray-400 group-hover:text-lime-500"
-                />
-                {{ item.label }}
-              </Link>
-            </div>
-
-            <span class="flex-1"></span>
-
-            <div class="mb-2 border-t border-gray-200 dark:border-gray-700">
-              <Link
-                as="button"
-                href="/logout"
-                method="post"
-                class="flex items-center gap-4 px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
-              >
-                <img
-                  :src="$page.props.auth.avatar"
-                  class="rounded-full w-7 h-7">
-
-                <span>
-                  {{ $page.props.auth.user.full_name }}
-                </span>
-              </Link>
-            </div>
-          </div>
         </div>
       </TransitionChild>
 
@@ -182,14 +48,18 @@ onMounted(() => {
   </TransitionRoot>
 
   <aside class="relative hidden w-64 border-r border-gray-200 md:flex-col bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
-    <div class="px-6 py-4 mb-5">
-      <h3 class="flex items-center gap-4 text-base font-bold text-gray-900 dark:text-white">
+
+    <!-- <div class="px-6 py-4 mb-5">
+      <Link
+        href="/"
+        as="button"
+        class="flex items-center gap-4 text-base font-bold text-gray-900 dark:text-white">
         <ApplicationLogo class="w-10 h-10" />
 
         <span class="text-2xl">
           ultrashots
         </span>
-      </h3>
+      </Link>
     </div>
 
     <section
@@ -205,7 +75,7 @@ onMounted(() => {
           :href="item.filter ? route(item.href, item.filter) : route(item.href)"
           class="flex w-full items-center gap-2 px-6 py-2.5 text-gray-400 hover:text-lime-600 group"
           :class="{
-            'font-bold text-lime-600': item.active ? $page.url.startsWith(item.active) : $page.url === '/'
+            'font-bold text-lime-600': item.active ? $page.url.startsWith(item.active) : $page.url === '/contacts'
           }"
           :key="index"
           as="button"
@@ -242,22 +112,15 @@ onMounted(() => {
 
     </section>
 
-    <div class="absolute bottom-0 z-40 w-full mb-2 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex-1"></div>
 
-      <Link
-        as="button"
-        href="/logout"
-        method="post"
-        class="flex items-center gap-4 px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
-      >
-        <img
-          :src="$page.props.auth.avatar"
-          class="rounded-full w-7 h-7">
+    <div class="relative z-40 flex items-center w-full gap-4 px-6 mb-2 border-t border-gray-200 dark:border-gray-700">
 
-        <span>
-          {{ $page.props.auth.user.full_name }}
-        </span>
-      </Link>
-    </div>
+      <QuickActionMenu />
+
+    </div> -->
+
+    <SideBarMenu />
+
   </aside>
 </template>

@@ -16,9 +16,9 @@ return new class extends Migration
     Schema::create('addresses', function (Blueprint $table) {
       $table->id();
       $table->string('type');
-      $table->string('street');
-      $table->string('city');
-      $table->string('state');
+      $table->string('street')->nullable();
+      $table->string('city')->nullable();
+      $table->string('state')->nullable();
       $table->string('country');
       $table->morphs('model');
       $table->timestamps();

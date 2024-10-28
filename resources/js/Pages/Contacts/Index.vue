@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import ActionMenu from '@/Components/ActionMenu.vue'
+import ContactActionMenu from '@/Components/ContactActionMenu.vue'
 import ContactCard from '@/Components/ContactCard.vue'
 import NoContactFound from '@/Components/NoContactFound.vue'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import type { ContactsData } from '@/types/index'
-import { Head } from '@inertiajs/vue3'
+import AuthenticatedLayout from '@/Layouts/AuthLayout.vue'
+import { ContactsBase } from '@/types'
+import { Head, Link } from '@inertiajs/vue3'
+import { IconPlus } from '@tabler/icons-vue'
 
 interface Props {
-  baseGroup: ContactsData
+  baseGroup: ContactsBase
 }
 
 const props = defineProps<Props>()
@@ -18,7 +19,7 @@ defineOptions({ layout: AuthenticatedLayout })
 <template>
   <Head title="Explore Contacts" />
 
-  <ActionMenu :contact-base="baseGroup" />
+  <ContactActionMenu :contact-base="baseGroup" />
 
   <div class="py-12">
     <div class="flex px-6 mx-auto max-w-7xl">
@@ -26,10 +27,10 @@ defineOptions({ layout: AuthenticatedLayout })
         <section>
           <div
             v-for="(contactsArray, group) in baseGroup"
-            :key="group" class="pt-10 space-y-4"
+            :key="group" class="pt-12 space-y-4"
           >
             <span
-              class="flex items-center justify-center w-8 h-8 p-1 mb-4 ml-16 font-bold text-white bg-gray-600 rounded dark:bg-gray-200 dark:text-gray-900"
+              class="flex items-center justify-center w-8 h-8 p-1 mb-4 ml-20 font-bold text-white bg-gray-600 rounded dark:bg-gray-200 dark:text-gray-900"
             >
               {{ group }}
             </span>
@@ -46,7 +47,26 @@ defineOptions({ layout: AuthenticatedLayout })
       </template>
 
       <article v-else class="w-full py-12 mt-12">
-        <NoContactFound />
+
+        <NoContactFound>
+
+          <div>
+
+            <Link
+              :href="route('contacts.create')"
+              class="flex gap-2 items-center text-gray-500 border-gray-500 border hover:border-gray-900 rounded-lg dark:border-slate-600 dark:text-gray-500 font-semibold my-4 px-3 py-1.5 dark:hover:text-gray-400 dark:hover:border-gray-400 hover:text-gray-900 transition duration-300"
+              as="button">
+
+              <IconPlus class="w-5 h-5" stroke-width="3.5" />
+
+              <span>Create contact</span>
+
+            </Link>
+
+          </div>
+
+        </NoContactFound>
+
       </article>
     </div>
   </div>

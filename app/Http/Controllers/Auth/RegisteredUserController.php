@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -37,16 +38,31 @@ class RegisteredUserController extends Controller
     $request->validate([
       'first_name' => ['required', 'string', 'max:255'],
       'last_name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-      'password' => ['required', 'confirmed', Rules\Password::defaults()],
+      'company_name' => ['required'],
+      'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:' . User::class],
+      'password' => ['required', Rules\Password::defaults()],
+    ], [
+      'first_name.required' => 'You didn\'t enter your first name',
+      'last_name.required' => 'You didn\'t enter your last name',
+      'email.required' => 'Your email address is blank',
+      'email.email' => 'Provide a valid email address',
+      'email.unique' => 'Email address is already used. Try to login instead',
+      'company_name.required' => 'Please enter the company you represent',
+      'password.required' => 'You can\'t leave the password blank'
     ]);
+
+    $company = Company::create(['name' => $request->company_name]);
 
     $user = User::create([
       'first_name' => $request->first_name,
       'last_name' => $request->last_name,
       'email' => $request->email,
       'password' => Hash::make($request->password),
+      'company_id' => $company->id,
     ]);
+
+    // Assign role to first user of the above company as Company Admin
+    $user->assignRole('Company Admin');
 
     event(new Registered($user));
 

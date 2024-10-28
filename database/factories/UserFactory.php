@@ -39,18 +39,4 @@ class UserFactory extends Factory
       'email_verified_at' => null,
     ]);
   }
-
-  public function configure()
-  {
-    return $this->afterCreating(function (\App\Models\User $user) {
-      $numPhoneNumbers = fake('en_ZA')->numberBetween(0, 2);
-
-      for ($i = 0; $i < $numPhoneNumbers; $i++) {
-        $user->phoneNumbers()->create([
-          'number' => fake('en_ZA')->phoneNumber(),
-          'type' => fake('en_ZA')->randomElement(['work', 'home', 'mobile'])
-        ]);
-      }
-    });
-  }
 }

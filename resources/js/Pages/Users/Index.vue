@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import AuthenticatedLayout from '@/Layouts/Keep.AuthenticatedLayout.bak.txt'
 
 defineOptions({
   layout: AuthenticatedLayout,
