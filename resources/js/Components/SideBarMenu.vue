@@ -22,7 +22,7 @@ const { setTags } = tagStore
 const mainNavigation = [
   {
     href: 'dashboard',
-    label: 'Dashboard',
+    label: 'Analytics',
     icon: IconChartLine,
     active: '/dashboard'
   },
@@ -129,8 +129,8 @@ onMounted(() => {
 
     <div class="flex-1"></div>
 
-    <div class="flex items-center gap-4 px-6 mb-2 text-gray-500 border-t border-gray-200 dark:border-gray-700"
-        >
+    <div
+      class="px-6 py-2 text-gray-500 border-t border-gray-200 dark:border-gray-700">
 
       <QuickActionMenu />
 

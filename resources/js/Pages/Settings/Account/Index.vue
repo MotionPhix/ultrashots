@@ -43,7 +43,7 @@ defineOptions({
 
         <!-- account start -->
 
-        <div class="w-full space-y-6">
+        <div class="w-full space-y-6 pb-12">
 
           <UpdateAccountForm
             :must-verify-email="mustVerifyEmail"

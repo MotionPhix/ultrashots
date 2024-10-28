@@ -39,9 +39,9 @@ class Contact extends Model
     return $this->belongsTo(Company::class, 'company_id');
   }
 
-  public function work(): BelongsTo
+  public function office(): BelongsTo
   {
-    return $this->belongsTo(Company::class, 'real_company_id');
+    return $this->belongsTo(Company::class, 'office_id');
   }
 
   public function Groups(): BelongsToMany

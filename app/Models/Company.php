@@ -34,6 +34,11 @@ class Company extends Model
     return $this->hasMany(Contact::class);
   }
 
+  public function users(): HasMany
+  {
+    return $this->hasMany(User::class);
+  }
+
   public function Groups(): HasMany
   {
     return $this->hasMany(Group::class);

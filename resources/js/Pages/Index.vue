@@ -64,6 +64,7 @@ defineOptions({
               ]"
               position="bottom right"
               v-if="$page.props.auth.user"
+              trigger="click"
               no-chevron>
               <template #element>
 

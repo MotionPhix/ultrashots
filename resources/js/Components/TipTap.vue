@@ -75,7 +75,7 @@ onMounted(() => {
 
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose lg:prose-md mx-auto focus:outline-none p-2 scrollbar-none scroll-smooth shadow-sm rounded-b-md h-64 overflow-y-auto',
+        class: 'prose w-full dark:prose-invert prose-sm sm:prose lg:prose-md mx-auto focus:outline-none p-2 scrollbar-none scroll-smooth shadow-sm rounded-b-md h-64 overflow-y-auto',
       },
     },
 

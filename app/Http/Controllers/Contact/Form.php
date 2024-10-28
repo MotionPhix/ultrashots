@@ -39,19 +39,19 @@ class Form extends Controller
       ]);
     }
 
-    $contact->load('phones', 'emails', 'work.address');
+    $contact->load('phones', 'emails', 'office.address');
 
     // Ensure $company is an empty array if it's null
-    $companyData = $contact->work
+    $companyData = $contact->office
       ? [
         'id' => [
-          'label' => $contact->work->name,
-          'value' => $contact->work->id,
+          'label' => $contact->office->name,
+          'value' => $contact->office->id,
         ],
-        'name' => $contact->work->name,
-        'slogan' => $contact->work->slogan,
-        'address' => $contact->work->address,
-        'url' => $contact->work->url,
+        'name' => $contact->office->name,
+        'slogan' => $contact->office->slogan,
+        'address' => $contact->office->address,
+        'url' => $contact->office->url,
       ]
       : [
         'id' => [

@@ -13,8 +13,18 @@ class Index extends Controller
      */
     public function __invoke(Request $request)
     {
+      $company = $request->user()->company;
 
-      return Inertia::render('Dashboard');
+      return Inertia('Dashboard', [
+
+        'analytics' => fn() => [
+          'user_count' => $company->users->count() ?? 0,
+          'contact_count' => $company->contacts->count() ?? 0,
+          'contact_group_count' => $company->groups->count() ?? 0,
+          'sent_email_count' => rand(12, 900)
+        ]
+
+      ]);
 
     }
 }

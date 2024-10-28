@@ -15,19 +15,31 @@ class Index extends Controller
 
     $settings = $company->settings->pluck('value', 'key');
 
-    // Include address if it exists
-    $address = $company->address;
+    $settings = array_merge($settings->toArray(), [
 
-    if ($address) {
-      $settings = array_merge($settings->toArray(), [
-        'address' => [
-          'street' => $address->street,
-          'city' => $address->city,
-          'state' => $address->state,
-          'country' => $address->country
-        ]
-      ]);
-    }
+      'company' => [
+        'fid' => $company->fid,
+        'name' => $company->name,
+        'slogan' => $company->slogan,
+        'url' => $company->url,
+      ],
+
+      'address' => [
+        'street' => $company->address->street ?? '',
+        'city' => $company->address->city ?? '',
+        'state' => $company->address->state ?? '',
+        'country' => $company->address->country ?? ''
+      ],
+
+      'subscription' => $company->subscription->only([
+        'advanced_analytics',
+        'contact_limit',
+        'email_limit',
+        'price',
+        'name',
+      ])
+
+    ]);
 
     return Inertia('Settings/Account/Index', [
       'mustVerifyEmail' => fn() => $request->user() instanceof MustVerifyEmail,

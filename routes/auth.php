@@ -222,7 +222,7 @@ Route::middleware('auth')->group(function () {
 
     Route::delete(
       '/profile',
-      [\App\Http\Controllers\ProfileController::class, 'destroy']
+      [\App\Http\Controllers\Settings\Profile\ProfileController::class, 'destroy']
     )->name('settings.profile.destroy');
 
     Route::get(

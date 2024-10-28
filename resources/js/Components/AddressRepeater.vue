@@ -2,6 +2,7 @@
 import InputError from '@/Components/InputError.vue';
 import {Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue';
 import {onMounted, ref, watch} from 'vue';
+import InputLabel from "@/Components/InputLabel.vue";
 
 interface Address {
   street: string;
@@ -11,10 +12,21 @@ interface Address {
   type: string;
 }
 
-const props = defineProps<{
-  modelValue: Address | Address[] | null;
-  addMore: boolean;
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: Address | Address[] | string | null;
+    addMore?: boolean;
+  }>(), {
+    addMore: false,
+    modelValue: () => [{
+      street: '',
+      city: '',
+      state: '',
+      country:'',
+      type: 'office'
+    }],
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 const addresses = ref<Address[]>([])
@@ -54,9 +66,9 @@ function onAddressRemove(index: number) {
 
 <template>
   <div v-for="(address, idx) in addresses" :key="idx" class="relative mb-4 space-y-2 group first-letter:uppercase">
-    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    <InputLabel class="mb-2">
       {{ address?.type || 'office' }} address
-    </label>
+    </InputLabel>
 
     <section class="grid grid-cols-2 gap-4 md:gap-6">
       <div class="col-span-2 md:col-span-1">

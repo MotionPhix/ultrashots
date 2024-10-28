@@ -4,8 +4,6 @@ import 'maz-ui/css/main.css';
 
 // import '../css/maz-ui-variables.css'
 
-import 'vfonts/Inter.css';
-
 import "vue-toastification/dist/index.css";
 
 import '../css/app.css';
@@ -21,8 +19,6 @@ import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 import { createPinia } from 'pinia';
-
-import VueTouchRipple from 'vue-touch-ripple';
 
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 

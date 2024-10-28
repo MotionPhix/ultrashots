@@ -11,7 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::table('contacts', function (Blueprint $table) {
-      $table->foreignId('real_company_id')->nullable()->constrained('companies')->cascadeOnDelete();
+      $table->foreignId('office_id')->nullable()->constrained('companies')->cascadeOnDelete();
     });
   }
 
@@ -21,8 +21,8 @@ return new class extends Migration {
   public function down(): void
   {
     Schema::table('contacts', function (Blueprint $table) {
-      $table->dropForeign(['real_company_id']);
-      $table->dropColumn('real_company_id');
+      $table->dropForeign(['office_id']);
+      $table->dropColumn('office_id');
     });
   }
 };

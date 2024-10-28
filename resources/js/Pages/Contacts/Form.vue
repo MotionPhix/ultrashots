@@ -294,7 +294,6 @@ defineOptions({
         rounded-size="md"
         minListWidth="100%"
         autocomplete
-        :open="true"
         search
         block>
         <template #default="{ option }">

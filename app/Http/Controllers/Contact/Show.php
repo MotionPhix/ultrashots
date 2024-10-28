@@ -35,8 +35,8 @@ class Show extends Controller
       'contact' => $contact->load(
         'phones:id,model_id,type,number,formatted',
         'emails:id,model_id,email',
-        'work:id,name,url,slogan',
-        'work.address:id,model_id,street,city,state,country',
+        'office:id,name,url,slogan',
+        'office.address:id,model_id,street,city,state,country',
         'tags'
       ),
     ]);

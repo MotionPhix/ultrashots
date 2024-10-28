@@ -5,13 +5,12 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useNotificationStore } from '@/Stores/notificationStore';
 import {Link, useForm, usePage} from '@inertiajs/vue3';
+import AddressRepeater from "@/Components/AddressRepeater.vue";
 
 const props = defineProps<{
   mustVerifyEmail: boolean;
   settings: {};
 }>();
-
-const toastSession = usePage()
 
 const form = useForm({
   currency: props.settings.currency ?? 'MK',
@@ -25,6 +24,8 @@ const form = useForm({
 const notifications = useNotificationStore()
 
 const { notify } = notifications
+
+console.log(props.settings)
 
 const onSubmit = () => {
   form.transform((data) => {
@@ -52,30 +53,14 @@ const onSubmit = () => {
     return modifiedPayload
   });
 
-  if (props.account.fid) {
-    form.post(route('account.update', props.account.fid), {
-      forceFormData: true,
-      onSuccess: () => {
-        form.reset()
-      }
-    })
+  form.post(route('account.update', props.account.fid), {
 
-    return
-  }
-
-  form.post(route('account.store'), {
     forceFormData: true,
+
     onSuccess: () => {
-
-      notify({
-        message: toastSession.props.toast.message,
-        title: true,
-        type: toastSession.props.toast.type
-      })
-
       form.reset()
-
     }
+
   })
 }
 </script>
@@ -121,60 +106,65 @@ const onSubmit = () => {
           type="email"
           class="mt-1"
           v-model="form.default_sender_email"
-          placeholder="Enter your company name"
-          autocomplete="name" />
+          placeholder="Enter an email address to use in 'from' field"
+          autocomplete="name"
+          rounded-size="md"
+          block
+        />
 
         <InputError class="mt-2" :message="form.errors.name" />
       </div>
 
       <div>
-        <InputLabel for="email" value="Email" />
+        <InputLabel for="currency" value="Currency" />
 
-        <TextInput
-          id="email"
-          type="email"
+        <UltraInput
+          id="currency"
+          type="text"
           class="block w-full mt-1"
-          v-model="form.email"
-          placeholder="Enter your email address" />
+          v-model="form.currency"
+          placeholder="Enter your email address"
+          rounded-size="md"
+          block
+        />
 
         <InputError class="mt-2" :message="form.errors.email" />
       </div>
 
       <div>
-        <label for="account_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Address
-        </label>
 
-        <TextInput
-          id="account_address"
-          v-model="form.address" type="text"
-          placeholder="Enter your business address" />
+        <AddressRepeater
+          v-model="form.address" />
 
-        <InputError :message="form.errors.address" />
       </div>
 
       <div>
-        <label for="account_website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        <InputLabel
+          for="account_website" class="mb-2">
           Website
-        </label>
+        </InputLabel>
 
-        <TextInput
+        <UltraInput
           id="account_website"
           v-model="form.url" type="url"
-          placeholder="Enter your website e.g. https://www.example.com" />
+          placeholder="Company website e.g. https://www.example.com"
+          rounded-size="md"
+          block />
 
         <InputError :message="form.errors.url" />
       </div>
 
       <div>
-        <label for="account_slogan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        <InputLabel for="account_slogan" class="mb-2">
           Motto/Slogan
-        </label>
+        </InputLabel>
 
-        <TextInput
+        <UltraInput
           id="account_slogan"
           v-model="form.slogan" type="text"
-          placeholder="Enter your slogan" />
+          placeholder="Enter your slogan"
+          rounded-size="md"
+          block />
 
         <InputError :message="form.errors.slogan" />
       </div>
@@ -195,7 +185,15 @@ const onSubmit = () => {
       </div>
 
       <div class="flex items-center gap-4">
-        <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+        <UltraBtn
+          :disabled="form.processing"
+          :loading="form.processing"
+          rounded-size="md"
+          color="success"
+          type="submit"
+        >
+          Save
+        </UltraBtn>
 
         <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0"
           leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
