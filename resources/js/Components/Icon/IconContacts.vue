@@ -1,6 +1,12 @@
 <template>
- <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-  <path d="M 250.002 21.467 C 189.374 21.467 140.217 70.625 140.217 131.25 C 140.217 191.875 189.374 241.032 250.002 241.032 C 310.649 241.032 359.783 191.875 359.783 131.25 C 359.783 70.625 310.649 21.467 250.002 21.467 Z" style="fill: none; stroke-linecap: round; stroke-linejoin: round;" stroke-width="2.5em" stroke="currentColor" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, 0)"/>
-  <path d="M 359.772 295.564 L 140.206 295.564 C 115.029 295.564 91.121 306.468 76.702 324.081 C 61.556 342.648 57.358 368.681 73.702 392.855 C 108.759 444.672 176.092 478.533 249.991 478.533 C 323.908 478.533 391.241 444.672 426.3 392.855 C 442.644 368.681 438.447 342.648 423.275 324.081 C 408.881 306.468 384.972 295.564 359.772 295.564 Z" style="fill: none; stroke-linecap: round; stroke-linejoin: round;" stroke-width="2.5em" stroke="currentColor" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, 0)"/>
-</svg>
+  <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.51 21.5">
+    <g id="Layer_1-2">
+      <path
+        d="M4.33,19.25c-1.4-.8-5.1-2.6-2.9-4.7,1.1-1.1,2.3-1.8,3.9-1.8h8.8c1.5,0,2.8.8,3.9,1.8,2.3,2.2-1.5,3.9-2.9,4.7-3.3,2-7.5,2-10.8,0Z"
+        fill="none" class="stroke-2 stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path d="M14.23,5.25c0,2.5-2,4.5-4.5,4.5s-4.5-2-4.5-4.5S7.23.75,9.73.75s4.5,2,4.5,4.5Z" fill="none"
+            class="stroke-current"
+            stroke-width="2"/>
+    </g>
+  </svg>
 </template>

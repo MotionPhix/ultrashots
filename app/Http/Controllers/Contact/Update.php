@@ -85,39 +85,32 @@ class Update extends Controller
       $contact->emails()->whereNotIn('id', $emailIds)->delete();
     }
 
-    if (isset($validated['company']['address'])) {
+    if (isset($validated['office'])) {
 
-      $address = $validated['company']['address'][0];
+      if ($validated['office']['id']) {
 
-      if (isset($address['id'])) {
-
-        $address_exists = Address::find($address['id']);
-
-        if ($address_exists) {
-
-          if (
-            $address['city'] !== $address_exists->city ||
-            $address['state'] !== $address_exists->state ||
-            $address['street'] !== $address_exists->street ||
-            $address['country'] !== $address_exists->country
-          ) {
-            $address_exists->update($address);
-          }
-
-        }
-
-      } else {
-
-        $contact->company->address()->create($address);
+        $contact->office_id = $validated['office']['id'];
+        $contact->save();
 
       }
 
+      $officeData = array_intersect_key(
+        $validated['office'], array_flip(['url', 'slogan'])
+      );
+
+      $contact->office()->updateOrCreate(
+        ['id' => $validated['office']['id']], $officeData
+      );
+
     }
 
-    if (isset($validated['company'])) {
+    if (isset($validated['office']['address'])) {
 
-      $companyData = array_intersect_key($validated['company'], array_flip(['url', 'slogan']));
-      Company::updateOrCreate(['id' => $validated['company']['id']], $companyData);
+      $address = $validated['office']['address'][0];
+
+      $contact->office->address()->updateOrCreate(
+        ['id' => $address['id']], $address
+      );
 
     }
 

@@ -25,7 +25,7 @@ class Form extends Controller
     }
 
     if ($modal) {
-      return Inertia::render('Contacts/NotesForm', [
+      return Inertia('Contacts/NotesForm', [
 
         'contact' => [
           'id' => $contact->id,
@@ -33,7 +33,7 @@ class Form extends Controller
           'first_name' => $contact->first_name,
           'last_name' => $contact->last_name,
           'bio' => $contact->bio,
-          'company' => $contact->company->name,
+          'office' => $contact->company->name,
         ],
 
       ]);
@@ -75,7 +75,7 @@ class Form extends Controller
         'bio' => $contact->bio,
         'emails' => $contact->emails,
         'phones' => $contact->phones,
-        'company' => $companyData,
+        'office' => $companyData,
       ],
     ]);
   }

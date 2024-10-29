@@ -63,7 +63,7 @@ defineProps<{
 
       <section
         class="flex gap-6"
-        v-if="contact.work">
+        v-if="contact.office">
         <IconBuildingArch class="shrink-0"/>
 
         <div>
@@ -74,20 +74,20 @@ defineProps<{
 
             <span class="mb-2">
               <strong class="block">
-                {{ contact.work?.name }}
+                {{ contact.office?.name }}
               </strong>
 
               <small
                 class="block empty:hidden"
-                v-if="contact.work?.slogan">
-                {{ contact.work.slogan ?? 'Slogan not added yet' }}
+                v-if="contact.office?.slogan">
+                {{ contact.office.slogan ?? 'Slogan not added yet' }}
               </small>
             </span>
 
             <span
               class="flex items-start mb-1 empty:hidden"
-              v-if="contact.work?.address">
-              <span class="font-semibold text-gray-500 me-2">
+              v-if="contact.office?.address">
+              <span class="dark:text-lime-500 text-gray-700 me-2">
                 <IconMap2 class="w-3.5 h-3.5"/>
               </span>
 
@@ -100,22 +100,22 @@ defineProps<{
                 </small>
 
                 <strong>
-                  {{ contact.work.address.street }}
+                  {{ contact.office.address.street }}
                 </strong>
 
               </div>
 
             <div>
-              {{ contact.work.address.city }}
+              {{ contact.office.address.city }}
 
-              <span v-if="contact.work.address.state" class="empty:hidden">
-                , {{ contact.work.address.state }}
+              <span v-if="contact.office.address.state" class="empty:hidden">
+                , {{ contact.office.address.state }}
               </span>
 
             </div>
 
             <strong class="text-blue-500">
-              {{ contact.work.address.country }}
+              {{ contact.office.address.country }}
             </strong>
 
             </span>
@@ -123,7 +123,7 @@ defineProps<{
 
             <span
               class="flex items-center mb-1"
-              v-if="contact.work?.url">
+              v-if="contact.office?.url">
               <span class="font-semibold text-gray-400 me-2">
                 <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                      viewBox="0 0 21 20">
@@ -133,11 +133,11 @@ defineProps<{
               </span>
 
               <a
-                :href="contact.work.url"
+                :href="contact.office.url"
                 class="text-blue-600 dark:text-blue-500 hover:underline"
                 target="_blank">
 
-                {{ contact.work.url }}
+                {{ contact.office.url }}
               </a>
 
             </span>

@@ -44,5 +44,13 @@
 }
 
 .m-select-list {
-  @apply mt-2 w-full
+  @apply mt-2 w-full scrollbar-thin
+}
+
+.m-select-list__scroll-wrapper {
+  @apply scroll-smooth scrollbar-none
+}
+
+.m-btn.--is-button.--no-padding {
+  @apply p-0 min-h-2 hover:bg-transparent !important
 }

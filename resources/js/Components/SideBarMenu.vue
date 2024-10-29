@@ -99,7 +99,7 @@ onMounted(() => {
       >
         <component
           :is="item.icon"
-          class="w-6 h-6 group-hover:text-lime-500"
+          class="size-6 group-hover:text-lime-500 text-white"
         />
         {{ item.label }}
       </Link>

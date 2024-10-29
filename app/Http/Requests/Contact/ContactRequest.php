@@ -33,21 +33,21 @@ class ContactRequest extends FormRequest
       'middle_name' => 'sometimes|filled',
       'bio' => 'sometimes|filled',
 
-      'company.id' => 'sometimes|exists:companies,id',
-      'company.url' => 'sometimes|filled|url:http,https',
-      'company.slogan' => 'sometimes|filled',
-      'company.address' => 'sometimes|array',
-      'company.address.*.id' => 'sometimes|exists:addresses,id',
-      'company.address.*.type' => ['required', Rule::in(['office', 'home'])],
-      'company.address.*.street' => 'nullable',
-      'company.address.*.state' => 'nullable',
-      'company.address.*.country' => 'sometimes|filled',
-      'company.address.*.city' => [
+      'office.id' => 'sometimes|exists:companies,id',
+      'office.url' => 'sometimes|filled|url:http,https',
+      'office.slogan' => 'sometimes|filled',
+      'office.address' => 'sometimes|array',
+      'office.address.*.id' => 'sometimes|exists:addresses,id',
+      'office.address.*.type' => ['required', Rule::in(['office', 'home'])],
+      'office.address.*.street' => 'nullable',
+      'office.address.*.state' => 'nullable',
+      'office.address.*.country' => 'sometimes|filled',
+      'office.address.*.city' => [
         'sometimes',
         function ($attribute, $value, $fail) {
           $index = explode('.', $attribute)[2]; // Gets the wildcard index position
 
-          if (request("company.address.$index.street") && !$value) {
+          if (request("office.address.$index.street") && !$value) {
             $fail('Specify the city for the address');
           }
         },
@@ -72,20 +72,20 @@ class ContactRequest extends FormRequest
       'first_name.required' => 'Enter first name',
       'last_name.required' => 'Enter surname',
 
-      'company.id.exists' => 'Oops! We don\'t have that company yet!',
-      'company.url.filled' => 'You should fill out the company website',
-      'company.url.url' => 'You entered an invalid web URL.',
+      'office.id.exists' => 'Oops! YOU don\'t have that contact yet!',
+      'office.url.filled' => 'Fill out contact\'s website',
+      'office.url.url' => 'You entered an invalid web URL.',
 
       'emails.*.email.required' => 'Provide an email address',
       'emails.*.email.email' => 'You entered an invalid email',
       'emails.*.email.unique' => 'This email is already taken',
 
-      'company.address.*.type.required' => 'Address type is missing',
-      'company.address.*.type.in' => 'Address type can only be "office" or "home"',
-      'company.address.*.country.filled' => 'Name the country the company is located',
-      'company.address.*.street.filled' => 'Name the street address',
+      'office.address.*.type.required' => 'Address type is missing',
+      'office.address.*.type.in' => 'Address type can only be "office" or "home"',
+      'office.address.*.country.filled' => 'Name the country the contact is based',
+      'office.address.*.street.filled' => 'Name the street address',
 
-       'bio.filled' => 'Provide content for the note',
+      'bio.filled' => 'Provide content for the note',
 
       'phones.*.type.in' => 'Invalid phone type',
       'phones.*.country_code.filled' => 'The country code is not set',

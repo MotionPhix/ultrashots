@@ -76,9 +76,9 @@ export interface Contact {
   bio?: string;
   emails?: Email[];
   phones?: Phone[];
-  company_id?: number;
+  office_id?: number;
   deleted_at?: string;
-  work?: Company;
+  office?: Company;
   last_phone?: Phone;
   last_email?: Email;
   tags?: Tag[];

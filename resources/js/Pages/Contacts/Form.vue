@@ -3,16 +3,15 @@ import AddressRepeater from '@/Components/AddressRepeater.vue'
 import EmailRepeater from '@/Components/EmailRepeater.vue'
 import InputError from '@/Components/InputError.vue'
 import PhoneRepeater from '@/Components/PhoneRepeater.vue'
-import TipTap from '@/Components/TipTap.vue'
 import AuthenticatedLayout from '@/Layouts/AuthLayout.vue'
-import { useFieldStore } from '@/Stores/fieldStore'
-import type { Company, Contact, Email, Phone } from '@/types'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Head, Link, router, useForm } from '@inertiajs/vue3'
+import {useFieldStore} from '@/Stores/fieldStore'
+import type {Company, Contact, Email, Phone} from '@/types'
+import {Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
+import {Head, Link, router, useForm} from '@inertiajs/vue3'
 import {IconBriefcase, IconArrowLeft, IconPlus, IconLink, IconMap2, IconFileDescription} from '@tabler/icons-vue'
 import axios from 'axios'
-import { debounce } from 'lodash'
-import { storeToRefs } from 'pinia'
+import {debounce} from 'lodash'
+import {storeToRefs} from 'pinia'
 import {onMounted, ref} from 'vue'
 import InputLabel from "@/Components/InputLabel.vue";
 import IconContactAdd from "@/Components/Icon/IconContactAdd.vue";
@@ -23,11 +22,10 @@ interface FormData {
   first_name: string;
   last_name?: string;
   middle_name?: string;
-  bio?: string;
   job_title?: string;
   phones?: Phone[];
   emails?: Email[];
-  work?: Company;
+  office?: Company;
 }
 
 const props = defineProps<{
@@ -46,7 +44,7 @@ const {
   hasUrl,
 } = storeToRefs(fieldStore)
 
-const { toggleField } = fieldStore
+const {toggleField} = fieldStore
 
 const icons = {
   IconBriefcase,
@@ -58,16 +56,15 @@ const icons = {
 const form = useForm({
   first_name: props.contact.first_name,
   last_name: props.contact.last_name,
-  bio: props.contact.bio ?? '',
   middle_name: props.contact.middle_name,
   job_title: props.contact.job_title,
   emails: props.contact.emails,
   phones: props.contact.phones,
-  company_id: props.contact.work?.id,
-  company_address: props.contact.work?.address,
-  company_name: props.contact.work?.name,
-  company_slogan: props.contact.work?.slogan,
-  company_url: props.contact.work?.url,
+  office_id: props.contact.office?.id,
+  office_address: props.contact.office?.address,
+  office_name: props.contact.office?.name,
+  office_slogan: props.contact.office?.slogan,
+  office_url: props.contact.office?.url,
 })
 
 const companyOptions = ref()
@@ -107,54 +104,61 @@ function onSubmit() {
   if (hasMiddleName.value || !!form.middle_name)
     formData.middle_name = form.middle_name
 
-  if (form.bio?.length || !!form.bio?.charAt(5))
-    formData.bio = form.bio
+  if (form.office_id) {
 
-  if (form.company_id?.value) {
-    formData.work = {
-      id: form.company_id.value,
+    formData.office = {
+      id: form.office_id,
     }
 
-    if (hasSlogan.value || !!form.company_slogan)
-      formData.work.slogan = form.company_slogan
+    if (hasSlogan.value || !!form.office_slogan)
+      formData.office.slogan = form.office_slogan
 
-    if (hasUrl.value || !!form.company_url)
-      formData.work.url = form.company_url
+    if (hasUrl.value || !!form.office_url)
+      formData.office.url = form.office_url
 
-    if (hasAddress.value || !!form.company_address)
-      formData.work.address = form.company_address
+    if (hasAddress.value || !!form.office_address)
+      formData.office.address = form.office_address
+
   }
 
   if (props.contact.cid) {
-    if (props.contact.work?.address?.id)
-      formData.work.address[0].id = props.contact.work?.address?.id
 
-    return router.patch(route('contacts.update', props.contact.cid), formData as any, { preserveScroll: true })
+    if (props.contact.office?.address?.id)
+      formData.office.address[0].id = props.contact.office?.address?.id
+
+    return router.patch(route('contacts.update', props.contact.cid), formData as any, {preserveScroll: true})
+
+  } else {
+
+    router.post(route('contacts.store'), formData as any, {preserveScroll: true})
+
   }
 
-  router.post(route('contacts.store'), formData as any, { preserveScroll: true })
 }
 
 const fetchCompanies = debounce((q?: string) => {
 
   axios.get(q ? `/companies/${q}` : '/companies')
     .then((resp) => {
-      console.log(resp.data)
+
       companyOptions.value = resp.data.map((company: Company) => company)
+
     })
 
 }, 500)
 
 function handleCompany(id: number) {
+
   console.log('New company ID received:', id);
 
   fetchCompanies()
 
   setTimeout(() => {
 
-    form.company_id = id
+    form.office_id = id
 
   }, 100)
+
 }
 
 onMounted(() => {
@@ -170,7 +174,7 @@ defineOptions({
 
 <template>
   <Head
-    :title="contact.cid ? `Edit ${contact.first_name} ${contact.last_name}` : 'New contact'" />
+    :title="contact.cid ? `Edit ${contact.first_name} ${contact.last_name}` : 'New contact'"/>
 
   <Link
     as="button"
@@ -178,15 +182,15 @@ defineOptions({
     :href="contact.cid ? route('contacts.show', contact.cid) : route('contacts.index')"
     preserve-scroll>
 
-    <IconArrowLeft class="size-5" />
+    <IconArrowLeft class="size-5"/>
 
   </Link>
 
   <form
-    class="flex flex-col max-w-2xl gap-6 px-4 pb-16 my-16 mb-4 sm:pb-0 sm:px-8 md:mx-auto"
+    class="flex flex-col max-w-2xl gap-6 px-4 pb-16 my-16 sm:px-8 md:mx-auto"
     @submit.prevent="onSubmit">
 
-    <section class="flex gap-6">
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 
       <div class="flex-1">
         <InputLabel
@@ -204,44 +208,44 @@ defineOptions({
           block
         />
 
-        <InputError :message="$page.props.errors.first_name" />
+        <InputError :message="$page.props.errors.first_name"/>
+      </div>
+
+      <div v-if="hasMiddleName || !!form.middle_name">
+        <InputLabel
+          for="middle_name"
+          class="mb-2">
+          Middle name
+        </InputLabel>
+
+        <UltraInput
+          id="middle_name" v-model="form.middle_name" type="text"
+          placeholder="Enter middle name"
+          rounded-size="md"
+          block
+        />
+
+        <InputError :message="$page.props.errors.middle_name"/>
+      </div>
+
+      <div>
+        <InputLabel
+          for="last_name"
+          class="mb-2">
+          Surname
+        </InputLabel>
+
+        <UltraInput
+          id="last_name" v-model="form.last_name" type="text"
+          placeholder="Type surname"
+          rounded-size="md"
+          block
+        />
+
+        <InputError :message="$page.props.errors.last_name"/>
       </div>
 
     </section>
-
-    <div v-if="hasMiddleName || !!form.middle_name">
-      <InputLabel
-        for="middle_name"
-        class="mb-2">
-        Middle name
-      </InputLabel>
-
-      <UltraInput
-        id="middle_name" v-model="form.middle_name" type="text"
-        placeholder="Enter middle name"
-        rounded-size="md"
-        block
-      />
-
-      <InputError :message="$page.props.errors.middle_name" />
-    </div>
-
-    <div>
-      <InputLabel
-        for="last_name"
-        class="mb-2">
-        Surname
-      </InputLabel>
-
-      <UltraInput
-        id="last_name" v-model="form.last_name" type="text"
-        placeholder="Type surname"
-        rounded-size="md"
-        block
-      />
-
-      <InputError :message="$page.props.errors.last_name" />
-    </div>
 
     <div>
       <Menu as="div" class="relative z-10 inline-flex">
@@ -249,9 +253,9 @@ defineOptions({
           class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" stroke-width="2"
                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 5l0 14" />
-            <path d="M5 12l14 0" />
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 5l0 14"/>
+            <path d="M5 12l14 0"/>
           </svg>
           <span>Add field</span>
         </MenuButton>
@@ -273,112 +277,128 @@ defineOptions({
     </div>
 
     <div>
-      <EmailRepeater v-model="form.emails" />
-    </div>
 
-    <div>
-      <PhoneRepeater v-model="form.phones" />
-    </div>
-
-    <div>
       <InputLabel
         class="mb-2">
-        Company
+        Email address<span v-if="form.emails?.length > 1">es</span>
       </InputLabel>
 
-      <UltraSelect
-        search-placeholder="Search companies"
-        placeholder="Pick a company"
-        v-model="form.company_id"
-        :options="companyOptions"
-        rounded-size="md"
-        minListWidth="100%"
-        autocomplete
-        search
-        block>
-        <template #default="{ option }">
-          <div class="flex items-center" style="width: 100%; gap: 1rem">
-            <strong>
-              {{ option.label }}
-            </strong>
-          </div>
-        </template>
+      <EmailRepeater v-model="form.emails"/>
 
-        <template #no-results>
-          <div class="p-4 space-y-4">
-            <h3 class="font-serif text-xl">
-              Company not found.
-            </h3>
-
-            <AddCompanyForm @companyCreated="handleCompany"  />
-          </div>
-        </template>
-
-      </UltraSelect>
-
-      <InputError :message="$page.props.errors['company.id']" />
     </div>
 
-    <div v-if="hasAddress || !!form.company_address">
+    <div>
+
+      <InputLabel
+        class="mb-2">
+        Phone number<span v-if="form.phones?.length > 1">s</span>
+      </InputLabel>
+
+      <PhoneRepeater v-model="form.phones"/>
+    </div>
+
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+
+      <div>
+        <InputLabel
+          class="mb-2">
+          Company name
+        </InputLabel>
+
+        <UltraSelect
+          search-placeholder="Search companies"
+          placeholder="Pick a company"
+          v-model="form.office_id"
+          :options="companyOptions"
+          rounded-size="md"
+          minListWidth="100%"
+          autocomplete
+          no-chevron
+          search
+          block>
+          <template #default="{ option }">
+            <div class="flex items-center" style="width: 100%; gap: 1rem">
+              <strong>
+                {{ option.label }}
+              </strong>
+            </div>
+          </template>
+
+          <template #no-results>
+            <div class="p-4 space-y-4">
+              <h3 class="font-serif text-xl">
+                Company not found.
+              </h3>
+
+              <AddCompanyForm @companyCreated="handleCompany"/>
+            </div>
+          </template>
+
+        </UltraSelect>
+
+        <InputError :message="$page.props.errors['company.id']"/>
+      </div>
+
+      <div v-if="hasUrl || !!form.office_url">
+        <InputLabel
+          for="company_website"
+          class="mb-2">
+          Website
+        </InputLabel>
+
+        <UltraInput
+          id="company_website"
+          v-model="form.office_url" type="text"
+          placeholder="E.g. https://www.example.com"
+          rounded-size="md"
+          block
+        />
+
+        <InputError :message="$page.props.errors['company.url']"/>
+      </div>
+
+      <div v-if="hasSlogan || !!form.office_slogan">
+        <InputLabel
+          for="company_slogan"
+          class="mb-2">
+          Motto/Slogan
+        </InputLabel>
+
+        <UltraInput
+          id="company_slogan"
+          v-model="form.office_slogan" type="text"
+          placeholder="Enter slogan"
+          rounded-size="md"
+          block
+        />
+
+        <InputError :message="$page.props.errors['company.slogan']"/>
+      </div>
+
+      <div v-if="hasJobTitle || !!form.job_title">
+        <InputLabel
+          for="job_title" class="mb-2">
+          Job title
+        </InputLabel>
+
+        <UltraInput
+          id="job_title" v-model="form.job_title" type="text"
+          placeholder="Enter job title"
+          rounded-size="md"
+          block
+        />
+
+        <InputError :message="$page.props.errors['job_title']"/>
+      </div>
+
+    </section>
+
+    <div v-if="hasAddress || !!form.office_address">
 
       <AddressRepeater
         :add-more="false"
-        v-model="form.company_address" />
+        v-model="form.office_address"/>
 
-      <InputError :message="$page.props.errors['company.address']" />
-
-    </div>
-
-    <div v-if="hasUrl || !!form.company_url">
-      <InputLabel
-        for="company_website"
-        class="mb-2">
-        Website
-      </InputLabel>
-
-      <UltraInput
-        id="company_website"
-        v-model="form.company_url" type="text"
-        placeholder="E.g. https://www.example.com"
-        rounded-size="md"
-        block
-      />
-
-      <InputError :message="$page.props.errors['company.url']" />
-    </div>
-
-    <div v-if="hasSlogan || !!form.company_slogan">
-      <InputLabel
-        for="company_slogan"
-        class="mb-2">
-        Motto/Slogan
-      </InputLabel>
-
-      <UltraInput
-        id="company_slogan"
-        v-model="form.company_slogan" type="text"
-        placeholder="Enter slogan"
-        rounded-size="md"
-        block
-      />
-
-      <InputError :message="$page.props.errors['company.slogan']" />
-    </div>
-
-    <div v-if="hasJobTitle || !!form.job_title">
-      <InputLabel
-        for="job_title" class="mb-2">
-        Job title
-      </InputLabel>
-
-      <UltraInput
-        id="job_title" v-model="form.job_title" type="text"
-        placeholder="Enter job title"
-        rounded-size="md"
-        block
-      />
-
-      <InputError :message="$page.props.errors['job_title']" />
     </div>
 
     <div class="col-span-2">
@@ -406,11 +426,13 @@ defineOptions({
           },
         ]"
         no-chevron
-        trigger="click">
+        trigger="click"
+        no-padding>
         <template #default>
-          <span class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500">
+          <span
+            class="flex items-center gap-2 font-bold text-blue-300 transition duration-300 dark:text-lime-300 hover:text-blue-500">
 
-            <IconPlus /> <span>Add work field</span>
+            <IconPlus/> <span>Add company field</span>
 
           </span>
         </template>
@@ -418,7 +440,7 @@ defineOptions({
         <template #menuitem-label="{ item }">
           <div class="maz-flex maz-items-center maz-gap-2">
 
-            <component :is="icons[item.icon]" class="size-5" />
+            <component :is="icons[item.icon]" class="size-5"/>
 
             <span>
               {{ item.label }}
@@ -426,21 +448,6 @@ defineOptions({
           </div>
         </template>
       </UltraDropdown>
-    </div>
-
-    <div class="mt-4">
-      <InputLabel
-        for="bio"
-        class="mb-2"
-      >
-        Notes
-      </InputLabel>
-
-      <section>
-        <TipTap v-model="form.bio" placeholder="Write down some notes" />
-      </section>
-
-      <InputError :message="$page.props.errors.bio" />
     </div>
 
     <div class="flex items-center justify-end col-span-4 gap-4 pt-4">
@@ -452,7 +459,7 @@ defineOptions({
         <template #left-icon>
 
           <IconContactAdd
-            class="w-6 h-6 mr-1 -ml-1" />
+            class="w-6 h-6 mr-1 -ml-1"/>
 
         </template>
 
