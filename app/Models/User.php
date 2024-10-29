@@ -30,6 +30,7 @@ class User extends Authenticatable implements HasMedia
     'banned',
     'email',
     'password',
+    'company_id',
   ];
 
   /**

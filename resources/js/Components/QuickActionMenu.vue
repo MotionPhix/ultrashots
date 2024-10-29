@@ -7,8 +7,17 @@ const menuControl = useMenuStore()
 const { toggleOpen } = menuControl
 
 const openPath = (path) => {
+
   toggleOpen()
+
   router.get(route(path))
+
+}
+
+const onLogout = () => {
+
+  router.post(route('logout'))
+
 }
 
 const icons = {
@@ -28,19 +37,18 @@ const icons = {
       {
         label: 'Logout',
         icon: 'IconLogout',
-        action: () => openPath('settings.profile.index')
+        action: () => onLogout()
       }
     ]"
-    block
     no-chevron
-    no-padding
     position="top left"
-    trigger="click">
+    trigger="click"
+    is-button="false">
     <template #default>
 
       <div class="flex items-center gap-2">
 
-        <UltraAvatar :src="$page.props.auth.avatar" />
+        <UltraAvatar size="sm" :src="$page.props.auth.avatar" />
 
         <span class="font-semibold text-gray-700 dark:text-gray-400 text-wrap">
           {{ $page.props.auth.user.full_name }}

@@ -24,7 +24,8 @@ class Contact extends Model
     'job_title',
     'middle_name',
     'is_favorite',
-    'user_id',
+    'company_id',
+    'office_id'
   ];
 
   protected $casts = [

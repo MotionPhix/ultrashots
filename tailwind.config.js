@@ -16,7 +16,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['v-sans', ...defaultTheme.fontFamily.sans],
+        sans: ['Roboto', ...defaultTheme.fontFamily.sans],
         serif: ['DM Serif Display', 'serif']
       },
 

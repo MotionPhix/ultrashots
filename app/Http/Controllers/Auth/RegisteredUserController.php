@@ -64,6 +64,14 @@ class RegisteredUserController extends Controller
     // Assign role to first user of the above company as Company Admin
     $user->assignRole('Company Admin');
 
+    // Assign a default subscription
+    $basicMonthlySubscription = \App\Models\Subscription::where('name', 'Basic')
+      ->where('subscription_type', 'monthly')
+      ->first();
+
+    $company->subscription()->associate($basicMonthlySubscription);
+    $company->save();
+
     event(new Registered($user));
 
     Auth::login($user);

@@ -13,10 +13,15 @@ class Subscription extends Model
   protected $fillable = [
     'name',
     'price',
+    'user_limit',
     'contact_limit',
     'email_limit',
     'advanced_analytics',
     'custom_domain',
+    'support_level',
+    'storage_limit',
+    'subscription_type', // "monthly" or "yearly"
+    'duration_in_days',
   ];
 
   public function companies(): HasMany

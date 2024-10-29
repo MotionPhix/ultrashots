@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings\Account;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,13 +32,28 @@ class Index extends Controller
         'country' => $company->address->country ?? ''
       ],
 
-      'subscription' => $company->subscription->only([
-        'advanced_analytics',
-        'contact_limit',
-        'email_limit',
-        'price',
-        'name',
-      ])
+      'subscription' => [
+        'current' => $company->subscription
+          ? $company->subscription->only([
+            'id',
+            'name',
+            'price',
+            'contact_limit',
+            'email_limit',
+            'advanced_analytics'
+          ])
+          : [
+            'id' => null,
+            'name' => 'No Subscription',
+            'price' => 0,
+            'contact_limit' => 0,
+            'email_limit' => 0,
+            'advanced_analytics' => false,
+          ],
+        'available' => Subscription::whereIn('subscription_type', ['monthly', 'yearly'])
+          ->get(['id', 'name', 'price', 'subscription_type']),
+      ]
+
 
     ]);
 
