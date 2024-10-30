@@ -47,7 +47,7 @@ const { toggleOpen } = menuControl
     </Dialog>
   </TransitionRoot>
 
-  <aside class="relative hidden w-64 border-r border-gray-200 md:flex-col bg-gray-50 dark:bg-gray-900 dark:border-none md:flex">
+  <aside class="relative hidden w-64 border-r border-neutral-300 md:flex-col dark:border-neutral-600 md:flex">
 
     <SideBarMenu />
 

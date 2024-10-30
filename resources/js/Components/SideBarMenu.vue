@@ -6,10 +6,13 @@ import QuickActionMenu from '@/Components/QuickActionMenu.vue';
 import { useMenuStore } from '@/Stores/menuStore';
 import { useTagStore } from '@/Stores/tagStore';
 import { Link } from '@inertiajs/vue3';
-import { IconChartLine, IconStar, IconTag, IconTemplate, IconTrash } from '@tabler/icons-vue';
+import { IconChartLine, IconTag } from '@tabler/icons-vue';
 import axios from 'axios';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
+import IconMailTemplate from "@/Components/Icon/IconMailTemplate.vue";
+import IconContactFavourite from "@/Components/Icon/IconContactFavourite.vue";
+import IconRemove from "@/Components/Icon/IconRemove.vue";
 
 const tagStore = useTagStore()
 
@@ -29,14 +32,14 @@ const mainNavigation = [
   {
     href: 'templates.starter',
     label: 'Templates',
-    icon: IconTemplate,
+    icon: IconMailTemplate,
     active: '/templates'
   },
   {
     href: 'contacts.index',
     filter: 'favourites',
     label: 'Favourites',
-    icon: IconStar,
+    icon: IconContactFavourite,
     active: '/contacts/favourites'
   },
   {
@@ -54,7 +57,7 @@ const mainNavigation = [
     href: 'contacts.index',
     filter: 'deleted',
     label: 'Deleted',
-    icon: IconTrash,
+    icon: IconRemove,
     active: '/contacts/deleted'
   },
 ]
@@ -87,6 +90,7 @@ onMounted(() => {
       <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
         Main
       </h3>
+
       <Link
         v-for="(item, index) in mainNavigation"
         :href="item.filter ? route(item.href, item.filter) : route(item.href)"
@@ -99,7 +103,7 @@ onMounted(() => {
       >
         <component
           :is="item.icon"
-          class="size-6 group-hover:text-lime-500 text-white"
+          class="size-6 group-hover:text-lime-500 dark:text-white text-gray-400"
         />
         {{ item.label }}
       </Link>
@@ -130,7 +134,7 @@ onMounted(() => {
     <div class="flex-1"></div>
 
     <div
-      class="px-6 py-2 text-gray-500 border-t border-gray-200 dark:border-gray-700">
+      class="px-6 py-2 text-gray-500">
 
       <QuickActionMenu />
 

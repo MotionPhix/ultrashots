@@ -1,12 +1,5 @@
 <template>
-  <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.51 21.5">
-    <g id="Layer_1-2">
-      <path
-        d="M4.33,19.25c-1.4-.8-5.1-2.6-2.9-4.7,1.1-1.1,2.3-1.8,3.9-1.8h8.8c1.5,0,2.8.8,3.9,1.8,2.3,2.2-1.5,3.9-2.9,4.7-3.3,2-7.5,2-10.8,0Z"
-        fill="none" class="stroke-2 stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      <path d="M14.23,5.25c0,2.5-2,4.5-4.5,4.5s-4.5-2-4.5-4.5S7.23.75,9.73.75s4.5,2,4.5,4.5Z" fill="none"
-            class="stroke-current"
-            stroke-width="2"/>
-    </g>
+  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" fill-rule="evenodd" clip-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 24000 24000">
+    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="22.926" stroke-width="1600" d="M12014.39 992.36c2768.74 0 5013.25 2244.5 5013.25 5013.25s-2244.51 5013.25-5013.25 5013.25c-2768.75 0-5013.25-2244.5-5013.25-5013.25s2244.5-5013.25 5013.25-5013.25zm136.54 14011.51c4642.83 0 8056.99-671.92 8945.36 1826.71 888.37 2498.65-3980.04 6188.52-9066 6188.52-5085.98 0-10139.51-3727.17-9108.64-6188.52 1030.87-2461.34 4586.45-1826.71 9229.28-1826.71z"/>
   </svg>
 </template>

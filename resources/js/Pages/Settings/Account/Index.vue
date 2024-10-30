@@ -20,13 +20,16 @@ defineOptions({
 
   <Head title="Account Settings" />
 
-  <div class="max-w-6xl min-h-screen py-12 mx-auto md:px-4">
+  <div class="max-w-full min-h-screen py-12">
 
-    <h1 class="py-6 mx-4 text-4xl leading-none tracking-tight text-gray-900 sm:mx-8 md:text-5xl lg:text-6xl dark:text-white">Settings</h1>
+    <h1
+      class="py-6 mx-6 text-4xl sm:text-5xl text-gray-900 sm:mx-8 dark:text-white">
+      Settings
+    </h1>
 
-    <div class="grid grid-cols-8 pt-3 sm:grid-cols-10">
+    <div class="pt-4">
 
-      <article class="col-span-10 px-4 overflow-hidden bg-white dark:bg-gray-900 md:rounded-xl sm:px-8 sm:shadow dark:format-invert">
+      <article class="px-4 overflow-hidden bg-white dark:bg-neutral-950 md:rounded-xl sm:px-8 sm:shadow">
 
         <SectionHeader>
 

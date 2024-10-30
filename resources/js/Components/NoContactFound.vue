@@ -39,8 +39,8 @@ const context = computed(() => {
 
 <template>
   <div class="flex flex-col items-center gap-3">
-    <IconContactList v-if="$page.url.startsWith('/g')" class="w-48 h-48 text-gray-400" stroke-width="1" />
-    <IconContacts v-else class="w-48 h-48 text-gray-400" stroke-width="1" />
+    <IconContactList v-if="$page.url.startsWith('/g')" class="size-48 text-gray-400" />
+    <IconContacts v-else class="size-48 text-gray-400" />
 
     <h2 class="mt-6 text-xl font-semibold leading-none text-center text-gray-500">
       No {{ context.title }} found!

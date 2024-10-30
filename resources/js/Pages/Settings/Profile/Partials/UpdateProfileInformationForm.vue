@@ -17,6 +17,10 @@ const notifications = useNotificationStore()
 
 const { notify } = notifications
 
+function uploadProfile() {
+  console.log('profile upload initiated!')
+}
+
 const form = useForm({
   first_name: props.user.first_name,
   last_name: props.user.last_name,
@@ -59,7 +63,7 @@ const onSubmit = () => {
 <template>
 
   <section
-    class="flex flex-col lg:flex-row lg:gap-6">
+    class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
     <header
       class="flex-1">
@@ -77,19 +81,16 @@ const onSubmit = () => {
       @submit.prevent="onSubmit"
       class="flex-1 mt-6 space-y-6 lg:mt-0">
 
-      <div class="inline-flex flex-col gap-2">
+      <div>
+
         <UltraAvatar
-          v-model="form.avatar"
           :src="$page.props.auth.avatar"
-          class="w-24 h-24" />
+          @click="uploadProfile"
+          rounded-size="xl"
+          size="1.5rem"
+          clickable
+        />
 
-        <progress
-          max="100"
-          v-if="form.progress"
-          :value="form.progress.percentage"
-          class="w-full my-2 text-sm dark:bg-lime-500 font-medium dark:text-white h-1.5" />
-
-        <InputError class="mt-2" :message="form.errors.avatar" />
       </div>
 
       <div>

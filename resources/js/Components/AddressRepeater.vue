@@ -15,9 +15,11 @@ interface Address {
 const props = withDefaults(
   defineProps<{
     modelValue: Address | Address[] | string | null;
+    stacked?: boolean;
     addMore?: boolean;
   }>(), {
     addMore: false,
+    stacked: false,
     modelValue: () => [{
       street: '',
       city: '',
@@ -65,12 +67,16 @@ function onAddressRemove(index: number) {
 </script>
 
 <template>
-  <div v-for="(address, idx) in addresses" :key="idx" class="relative mb-4 space-y-2 group first-letter:uppercase">
+  <div
+    v-for="(address, idx) in addresses" :key="idx"
+    class="relative mb-4 space-y-2 group first-letter:uppercase">
     <InputLabel class="mb-2">
       {{ address?.type || 'office' }} address
     </InputLabel>
 
-    <section class="grid grid-cols-2 gap-4 md:gap-6">
+    <section
+      class="grid gap-4 md:gap-6 grid-cols-1"
+      :class="stacked ? 'grid-cols-1' : 'grid-cols-2'">
       <div class="col-span-2 md:col-span-1">
         <UltraInput
           v-model="address.street"

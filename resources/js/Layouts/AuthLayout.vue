@@ -17,7 +17,7 @@ const { toggleOpen } = menuControl
 
 <template>
   <article
-    class="fixed z-50 flex items-center gap-4 top-5 right-5 justify-centers">
+    class="fixed z-20 flex items-center gap-4 top-5 right-5 justify-centers">
     <button
       class="flex items-center justify-center p-1 transition duration-300 rounded hover:opacity-70 bg-lime-500 md:hidden"
       value="Close sidebar" @click="toggleOpen"
@@ -39,14 +39,14 @@ const { toggleOpen } = menuControl
     </UseDark>
   </article>
 
-  <div class="flex min-h-screen">
+  <div class="flex min-h-screen mx-auto max-w-6xl">
 
     <SideBar />
 
     <section
-      class="flex-1 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-800 scrollbar-track-gray-100">
+      class="flex-1 h-screen overflow-y-auto scrollbar-none scroll-smooth">
 
-      <main>
+      <main class="md:px-10 px-4">
         <slot />
       </main>
 

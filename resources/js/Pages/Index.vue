@@ -32,23 +32,22 @@ defineOptions({
           <Link
             class="flex items-center gap-2 text-4xl font-semibold text-gray-800 dark:text-white"
             href="/" aria-label="Brand name">
-            <ApplicationLogo class="size-12 sm:size-10"/>
+            <ApplicationLogo class="size-10"/>
             <span class="hidden sm:inline-block">ultrashots</span>
           </Link>
 
           <div class="flex-1" />
 
           <div
-            class="hidden gap-4 text-lg font-semibold text-gray-800 sm:flex dark:text-white">
+            class="hidden gap-4 text-lg text-gray-800 sm:flex dark:text-white">
 
             <Link href="/templates" as="button">
-              Email templates
+              Templates
             </Link>
 
             <Link
-              :href="route('contact.us')"
-              class="text-lg font-semibold">
-              Contact us
+              :href="route('contact.us')" as="button">
+              Contact
             </Link>
 
           </div>
@@ -62,8 +61,9 @@ defineOptions({
                 { label: 'Dashboard', action: () => moveTo('dashboard') },
                 { label: 'Settings', action: () => moveTo('settings.account.index') },
               ]"
-              position="bottom right"
               v-if="$page.props.auth.user"
+              position="bottom right"
+              class="zero__out"
               trigger="click"
               no-chevron>
               <template #default>
@@ -106,16 +106,16 @@ defineOptions({
             <template v-else>
               <Link
                 :href="route('login')"
-                class="mr-4 text-gray-800 dark:text-white"
+                class="mr-4 text-gray-800 dark:text-white text-lg"
                 as="button">
                 Login
               </Link>
 
               <Link
                 v-if="canRegister"
-                as="button"
                 :href="route('register')"
-                class="inline-flex items-center px-4 py-2.5 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 dark:hover:bg-white active:bg-gray-900 dark:active:bg-gray-300"
+                class="px-4 py-1.5 text-white bg-gray-800 rounded-md dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 dark:hover:bg-white active:bg-gray-900 dark:active:bg-gray-300"
+                as="button"
               >
                 Sign up
               </Link>

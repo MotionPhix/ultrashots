@@ -16,6 +16,8 @@ return new class extends Migration {
       $table->decimal('price', 8, 2);
       $table->integer('contact_limit')->nullable();
       $table->integer('email_limit')->nullable();
+      $table->integer('duration_in_days')->default(30);
+      $table->string('subscription_type')->default('monthly');
       $table->boolean('advanced_analytics')->default(false);
       $table->boolean('custom_domain')->default(false);
       $table->timestamps();

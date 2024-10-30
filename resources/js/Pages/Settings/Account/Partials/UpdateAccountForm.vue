@@ -27,6 +27,10 @@ const { notify } = notifications
 
 console.log(props.settings)
 
+function uploadLogo() {
+  console.log('Initiated logo upload!')
+}
+
 const onSubmit = () => {
   form.transform((data) => {
     const modifiedPayload = {
@@ -68,7 +72,7 @@ const onSubmit = () => {
 <template>
 
   <section
-    class="flex flex-col lg:flex-row lg:gap-6">
+    class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
     <header
       class="flex-1">
@@ -88,13 +92,15 @@ const onSubmit = () => {
       @submit.prevent="onSubmit"
       class="flex-1 mt-6 space-y-6 lg:mt-0">
 
-      <div class="inline-flex flex-col gap-2">
+      <div>
 
         <UltraAvatar
-          :src="form.logo"
-          class="size-36" />
-
-        <InputError class="mt-2" :message="form.errors.logo" />
+          src="https://api.dicebear.com/7.x/big-smile/svg?backgroundColor=1d90ff&scale=80&seed=200"
+          size="2.5rem"
+          clickable
+          rounded-size="xl"
+          @click="uploadLogo"
+        />
 
       </div>
 
@@ -134,7 +140,9 @@ const onSubmit = () => {
       <div>
 
         <AddressRepeater
-          v-model="form.address" />
+          v-model="form.address"
+          :stacked="true"
+        />
 
       </div>
 

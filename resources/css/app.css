@@ -54,3 +54,7 @@
 .m-btn.--is-button.--no-padding {
   @apply p-0 min-h-2 hover:bg-transparent !important
 }
+
+.m-btn.custom {
+  @apply p-0 size-12 py-0 rounded-full !important
+}

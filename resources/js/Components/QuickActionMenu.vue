@@ -48,11 +48,19 @@ const icons = {
 
       <div class="flex items-center gap-2">
 
-        <UltraAvatar size="sm" :src="$page.props.auth.avatar" />
+        <UltraAvatar size="0.75rem" :src="$page.props.auth.avatar" />
 
-        <span class="font-semibold text-gray-700 dark:text-gray-400 text-wrap">
-          {{ $page.props.auth.user.full_name }}
-        </span>
+        <div class="flex flex-col items-start leading-tight">
+
+          <strong class="text-gray-700 dark:text-gray-400">
+            {{ $page.props.auth.user.full_name }}
+          </strong>
+
+          <span class="text-xs text-neutral-400">
+            {{ $page.props.auth.user.company.name }}
+          </span>
+
+        </div>
 
       </div>
 
