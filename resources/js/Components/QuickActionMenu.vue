@@ -1,6 +1,6 @@
 <script setup>
 import { useMenuStore } from '@/Stores/menuStore';
-import { Link, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { IconLogout, IconSettingsBolt } from '@tabler/icons-vue';
 
 const menuControl = useMenuStore()

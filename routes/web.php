@@ -16,6 +16,11 @@ Route::get('/templates', function() {
   return \Inertia\Inertia::render('Templates/Index');
 })->name('templates.starter');
 
+Route::get('/builderjs/dist/templates/default', function () {
+  return response()->file(public_path('builderjs/dist/templates/default/index.html'));
+});
+
+
 //Route::get(
 //  '/{filter?}',
 //  \App\Http\Controllers\Contact\Index::class

@@ -22,6 +22,9 @@
   <link href="https://fonts.bunny.net/css?family=dm-serif-display:400" rel="stylesheet" />
   <link href="https://fonts.bunny.net/css?family=roboto:300,400,500,700" rel="stylesheet" />
 
+  <link rel="stylesheet" href="/builderjs/dist/builder.css"></link>
+  <script type='text/javascript' src="/builderjs/dist/builder.js"></script>
+
   <!-- Scripts -->
   @routes
   @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])

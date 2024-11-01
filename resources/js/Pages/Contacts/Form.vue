@@ -289,6 +289,7 @@ defineOptions({
         <UltraSelect
           search-placeholder="Search companies"
           placeholder="Pick a company"
+          list-position="top left"
           v-model="form.office_id"
           :options="companies"
           rounded-size="md"
@@ -409,6 +410,7 @@ defineOptions({
             icon: 'IconFileDescription'
           },
         ]"
+        position="top left"
         no-chevron
         trigger="click"
         no-padding>

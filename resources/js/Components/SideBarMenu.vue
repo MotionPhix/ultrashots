@@ -3,13 +3,13 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import ContactListIcon from '@/Components/Icon/IconContactList.vue';
 import ContactsIcon from '@/Components/Icon/IconContacts.vue';
 import QuickActionMenu from '@/Components/QuickActionMenu.vue';
-import { useMenuStore } from '@/Stores/menuStore';
-import { useTagStore } from '@/Stores/tagStore';
-import { Link } from '@inertiajs/vue3';
-import { IconChartLine, IconTag } from '@tabler/icons-vue';
+import {useMenuStore} from '@/Stores/menuStore';
+import {useTagStore} from '@/Stores/tagStore';
+import {Link} from '@inertiajs/vue3';
+import {IconChartLine, IconTag} from '@tabler/icons-vue';
 import axios from 'axios';
-import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import {storeToRefs} from 'pinia';
+import {onMounted} from 'vue';
 import IconMailTemplate from "@/Components/Icon/IconMailTemplate.vue";
 import IconContactFavourite from "@/Components/Icon/IconContactFavourite.vue";
 import IconRemove from "@/Components/Icon/IconRemove.vue";
@@ -20,7 +20,7 @@ const {
   tags,
 } = storeToRefs(tagStore)
 
-const { setTags } = tagStore
+const {setTags} = tagStore
 
 const mainNavigation = [
   {
@@ -40,12 +40,13 @@ const mainNavigation = [
     filter: 'favourites',
     label: 'Favourites',
     icon: IconContactFavourite,
-    active: '/contacts/favourites'
+    active: '/people/favourites'
   },
   {
     href: 'contacts.index',
     label: 'People',
     icon: ContactsIcon,
+    active: '/people'
   },
   {
     href: 'groups.index',
@@ -58,13 +59,13 @@ const mainNavigation = [
     filter: 'deleted',
     label: 'Deleted',
     icon: IconRemove,
-    active: '/contacts/deleted'
+    active: '/people/deleted'
   },
 ]
 
 const menuControl = useMenuStore()
 
-const { toggleOpen } = menuControl
+const {toggleOpen} = menuControl
 
 onMounted(() => {
   axios
@@ -81,7 +82,8 @@ onMounted(() => {
       href="/"
       as="button"
       class="flex items-center gap-4 text-4xl font-bold dark:text-gray-200">
-      <ApplicationLogo class="w-10 h-10" /> <span>ultrashots</span>
+      <ApplicationLogo class="w-10 h-10"/>
+      <span>ultrashots</span>
     </Link>
   </div>
 
@@ -92,18 +94,19 @@ onMounted(() => {
       </h3>
 
       <Link
+        as="button"
         v-for="(item, index) in mainNavigation"
         :href="item.filter ? route(item.href, item.filter) : route(item.href)"
-        class="flex items-center gap-3 px-6 py-2.5 text-gray-500 dark:text-gray-300 dark:hover:text-lime-500 hover:text-lime-600 group"
+        class="text-sm w-full flex items-center gap-3 px-6 py-2.5 dark:hover:text-lime-500 hover:text-lime-600 group"
         :class="{
-          'font-bold text-lime-600 dark:text-lime-300': item.active ? $page.url.startsWith(item.active) : $page.url === '/contacts'
+          'text-lime-600 dark:text-lime-500 font-bold': $page.url.startsWith(item.active)
         }"
         @click="toggleOpen"
         :key="index"
       >
         <component
           :is="item.icon"
-          class="size-6 group-hover:text-lime-500 dark:text-white text-gray-400"
+          class="size-6"
         />
         {{ item.label }}
       </Link>
@@ -117,7 +120,7 @@ onMounted(() => {
       <Link
         v-for="(item) in tags"
         :href="route('tags.filter', item?.name.toLowerCase())"
-        class="flex items-center px-6 py-2.5 text-gray-500 hover:text-lime-600 group"
+        class="flex items-center px-6 py-2.5 text-neutral-500 hover:text-lime-600 group"
         :class="{
           'font-bold text-lime-600': $page.url.startsWith(`/tags/${item.name}`)
         }"
@@ -136,7 +139,7 @@ onMounted(() => {
     <div
       class="px-6 py-2 text-gray-500">
 
-      <QuickActionMenu />
+      <QuickActionMenu/>
 
     </div>
   </div>

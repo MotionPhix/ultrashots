@@ -211,11 +211,11 @@ function onSubmit() {
 
   <UltraModal
     name="upload-contact-file" v-slot="{ close }"
-    panel-classes="dark:bg-neutral-700 rounded-xl dark:text-neutral-100"
+    panel-classes="bg-neutral-300 dark:bg-neutral-700 rounded-xl dark:text-neutral-100"
     :close-button="false"
     ref="csvUploader">
 
-    <h2 class="text-2xl font-semibold mb-6">Import contacts</h2>
+    <h2 class="text-3xl font-thin mb-6">Import contacts</h2>
 
     <article class="grid md:grid-cols-2 grid-cols-1 gap-6 md:gap-16">
 
@@ -234,11 +234,12 @@ function onSubmit() {
 
       <div>
 
-        <form class="space-y-4" @submit.prevent="onSubmit">
+        <form class="space-y-4">
+
           <div class="mb-4">
             <InputLabel
               class="mb-2">
-              Upload your CSV file
+              Upload your contacts file
             </InputLabel>
 
             <FilePondInput
@@ -246,34 +247,38 @@ function onSubmit() {
               ref="logoFile"
               max-file-size="2MB"
               credits="false"
-              accepted-file-types="image/*"
-              label-idle="Drop your logo image here..."
+              accepted-file-types="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv"
+              label-idle="Drop the <strong>csv/excel</strong> file here..."
               :allow-multiple="false"
-              :allow-mage-preview="true"
+              :allow-mage-preview="false"
               :image-preview-max-height="150"
               @updatefiles="handleFilePond" />
 
             <InputError :message="form.errors.csv" />
           </div>
 
-          <div class="flex justify-end space-x-2">
-            <button
-              type="button"
-              @click="close"
-              class="px-4 py-2 dark:bg-transparent hover:text-opacity-40">
-              Cancel
-            </button>
-
-            <button
-              type="submit" class="px-4 py-2 text-white bg-lime-600 rounded hover:bg-lime-700">
-              Import
-            </button>
-          </div>
         </form>
 
       </div>
 
     </article>
+
+    <div class="flex justify-end border-neutral-400 space-x-2 dark:border-neutral-500 border-t  pt-6">
+      <button
+        type="button"
+        @click="close"
+        :disabled="form.processing"
+        class="px-4 py-2 dark:bg-transparent hover:text-opacity-40">
+        Cancel
+      </button>
+
+      <button
+        @click="onSubmit"
+        :disabled="form.processing"
+        class="px-4 py-2 text-white bg-lime-600 rounded hover:bg-lime-700">
+        Import
+      </button>
+    </div>
 
   </UltraModal>
 </template>
