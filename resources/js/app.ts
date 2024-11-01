@@ -2,8 +2,6 @@ import './bootstrap';
 
 import 'maz-ui/css/main.css';
 
-// import '../css/maz-ui-variables.css'
-
 import "vue-toastification/dist/index.css";
 
 import '../css/app.css';

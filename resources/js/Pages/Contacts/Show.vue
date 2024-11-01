@@ -121,7 +121,7 @@ defineOptions({ layout: AuthenticatedLayout })
               {{ contact.first_name + ' ' + contact.last_name }}
             </h3>
 
-            <span>{{ contact.job_title ?? contact.company?.name }}</span>
+            <span>{{ contact.job_title ?? contact.office?.name }}</span>
 
             <div class="flex items-center w-full gap-2 font-semibold sm:gap-6">
               <PrimaryButtonLink

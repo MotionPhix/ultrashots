@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Contact;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Contact;
 use Inertia\Inertia;
 
@@ -44,28 +45,22 @@ class Form extends Controller
     // Ensure $company is an empty array if it's null
     $companyData = $contact->office
       ? [
-        'id' => [
-          'label' => $contact->office->name,
-          'value' => $contact->office->id,
-        ],
+        'id' => $contact->office->id,
         'name' => $contact->office->name,
         'slogan' => $contact->office->slogan,
         'address' => $contact->office->address,
         'url' => $contact->office->url,
       ]
       : [
-        'id' => [
-          'label' => '',
-          'value' => ''
-        ],
+        'id' => '',
         'name' => '',
         'slogan' => '',
         'address' => '',
         'url' => '',
       ];
 
-    return Inertia::render('Contacts/Form', [
-      'contact' => [
+    return Inertia('Contacts/Form', [
+      'contact' => fn() => [
         'id' => $contact->id,
         'cid' => $contact->cid,
         'first_name' => $contact->first_name,
@@ -77,6 +72,13 @@ class Form extends Controller
         'phones' => $contact->phones,
         'office' => $companyData,
       ],
+
+      'companies' => fn() => Company::all('id', 'name')->transform(function ($firm) {
+        return [
+          'value' => $firm->id,
+          'label' => $firm->name
+        ];
+      })
     ]);
   }
 }

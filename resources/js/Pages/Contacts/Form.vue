@@ -10,9 +10,8 @@ import {Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {Head, Link, router, useForm} from '@inertiajs/vue3'
 import {IconBriefcase, IconArrowLeft, IconPlus, IconLink, IconMap2, IconFileDescription} from '@tabler/icons-vue'
 import axios from 'axios'
-import {debounce} from 'lodash'
 import {storeToRefs} from 'pinia'
-import {onMounted, ref} from 'vue'
+import {ref} from 'vue'
 import InputLabel from "@/Components/InputLabel.vue";
 import IconContactAdd from "@/Components/Icon/IconContactAdd.vue";
 import H3 from "@/Components/Icon/H3.vue";
@@ -29,7 +28,8 @@ interface FormData {
 }
 
 const props = defineProps<{
-  contact: Contact
+  contact: Contact;
+  companies?: [];
 }>()
 
 const message = ref()
@@ -136,36 +136,17 @@ function onSubmit() {
 
 }
 
-const fetchCompanies = debounce((q?: string) => {
-
-  axios.get(q ? `/companies/${q}` : '/companies')
-    .then((resp) => {
-
-      companyOptions.value = resp.data.map((company: Company) => company)
-
-    })
-
-}, 500)
-
 function handleCompany(id: number) {
 
   console.log('New company ID received:', id);
-
-  fetchCompanies()
 
   setTimeout(() => {
 
     form.office_id = id
 
-  }, 100)
+  }, 50)
 
 }
-
-onMounted(() => {
-
-  fetchCompanies()
-
-})
 
 defineOptions({
   layout: AuthenticatedLayout,
@@ -309,18 +290,21 @@ defineOptions({
           search-placeholder="Search companies"
           placeholder="Pick a company"
           v-model="form.office_id"
-          :options="companyOptions"
+          :options="companies"
           rounded-size="md"
-          minListWidth="100%"
+          color="success"
           autocomplete
           no-chevron
           search
           block>
-          <template #default="{ option }">
-            <div class="flex items-center" style="width: 100%; gap: 1rem">
-              <strong>
+          <template #default="{ option, isSelected }">
+            <div
+              class="dark:text-neutral-200">
+
+              <span :class="{ 'text-neutral-700 font-semibold' : isSelected }">
                 {{ option.label }}
-              </strong>
+              </span>
+
             </div>
           </template>
 
