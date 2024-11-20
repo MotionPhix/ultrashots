@@ -12,12 +12,16 @@ class Store extends Controller
   {
     $validated_company = $request->validated();
 
+    if ($request->user()->company_id) return back()->with('toast', ['message' => 'You already have a brand']);
+
     $company = Company::create($validated_company);
+
+    $request->user()->update(['company_id' => $company->id]);
 
     if ($request->wantsJson()) {
       return response()->json($company);
     }
 
-    return redirect()->back();
+    return redirect()->route('dashboard');
   }
 }

@@ -18,7 +18,7 @@ class CompanyRequest extends FormRequest
     $companyId = $this->route('company') ? $this->route('company')->id : null;
 
     return [
-      'name' => ['required', Rule::unique('companies', 'slug')->where(fn ($query) => $query->where('slug', '!=', Str::slug($this->name)))->ignore($companyId)],
+      'name' => ['required', 'filled', Rule::unique('companies', 'slug')->where(fn ($query) => $query->where('slug', '!=', Str::slug($this->name)))->ignore($companyId)],
       'slogan' => 'sometimes',
       'url' => 'sometimes|url',
       'address' => 'sometimes'
@@ -28,8 +28,9 @@ class CompanyRequest extends FormRequest
   public function messages()
   {
     return [
-      'name.required' => 'Company name cannot be empty',
-      'name.unique' => 'A company with this name already exists',
+      'name.required' => 'Please provide a brand name',
+      'name.filled' => 'Brand name cannot be empty',
+      'name.unique' => 'A brand with this name already exists',
       'url.url' => 'Invalid URL format',
     ];
   }

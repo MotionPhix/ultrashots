@@ -15,16 +15,24 @@ class Index extends Controller
     {
       $company = $request->user()->company;
 
-      return Inertia('Dashboard', [
+      if ($company) {
 
-        'analytics' => fn() => [
-          'user_count' => $company->users->count() ?? 0,
-          'contact_count' => $company->contacts->count() ?? 0,
-          'contact_group_count' => $company->groups->count() ?? 0,
-          'sent_email_count' => rand(12, 900)
-        ]
+        return Inertia('Dashboard/Analytics', [
 
-      ]);
+          'analytics' => fn() => [
+            'user_count' => $company->users->count() ?? 0,
+            'contact_count' => $company->contacts->count() ?? 0,
+            'contact_group_count' => $company->groups->count() ?? 0,
+            'sent_email_count' => rand(12, 900)
+          ]
+
+        ]);
+
+      } else {
+
+        return Inertia('Dashboard/Index');
+
+      }
 
     }
 }

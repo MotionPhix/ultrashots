@@ -16,7 +16,7 @@ defineOptions({
 
     <p class="text-xl">Email templates</p>
 
-    <h3 class="text-6xl font-semibold">
+    <h3 class="text-5xl font-semibold">
       Coming soon.
     </h3>
 

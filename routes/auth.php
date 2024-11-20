@@ -35,7 +35,7 @@ Route::middleware('guest')->group(function () {
     ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'ensure_user_has_company'])->group(function () {
 
   Route::get(
     '/dashboard',
@@ -144,7 +144,7 @@ Route::middleware('auth')->group(function () {
   });
 
   Route::group(
-    ['prefix' => 'companies'], function () {
+    ['prefix' => 'brands'], function () {
 
     Route::post(
       '/',

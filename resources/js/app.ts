@@ -6,11 +6,9 @@ import "vue-toastification/dist/index.css";
 
 import '../css/app.css';
 
-import 'preline'
-
 import type { DefineComponent } from 'vue';
 
-import { createApp, h } from 'vue';
+import { createApp } from 'vue';
 
 import { createInertiaApp, router } from '@inertiajs/vue3';
 

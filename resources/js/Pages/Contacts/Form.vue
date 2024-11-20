@@ -15,7 +15,7 @@ import {ref} from 'vue'
 import InputLabel from "@/Components/InputLabel.vue";
 import IconContactAdd from "@/Components/Icon/IconContactAdd.vue";
 import H3 from "@/Components/Icon/H3.vue";
-import AddCompanyForm from "@/Pages/Companies/AddCompanyForm.vue";
+import AddCompanyForm from "@/Pages/Companies/Form.vue";
 
 interface FormData {
   first_name: string;

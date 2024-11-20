@@ -57,7 +57,7 @@ const icons = {
           </strong>
 
           <span class="text-xs text-neutral-400">
-            {{ $page.props.auth.user.company.name }}
+            {{ $page.props.auth?.user?.company?.name ?? 'No brand added' }}
           </span>
 
         </div>

@@ -20,6 +20,15 @@ Route::get('/builderjs/dist/templates/default', function () {
   return response()->file(public_path('builderjs/dist/templates/default/index.html'));
 });
 
+Route::group(['starters'], function () {
+
+  Route::post(
+    '/',
+    \App\Http\Controllers\Company\Store::class
+  )->name('brands.store');
+
+})->middleware('auth');
+
 
 //Route::get(
 //  '/{filter?}',

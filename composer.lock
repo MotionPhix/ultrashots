@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a926b0d2f8dedb438d0869279854981",
+    "content-hash": "fa8449ef4fdc38fca9a5c70d0071b834",
     "packages": [
         {
             "name": "brick/math",
@@ -1357,16 +1357,16 @@
         },
         {
             "name": "inertiaui/modal",
-            "version": "0.5.4",
+            "version": "0.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiaui/modal.git",
-                "reference": "a33600305cdae423c7e3a65bf13ef9ea1d1b4e13"
+                "reference": "dd7595a60f4bcf1ed769b87d54f49ddf49d4fe48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiaui/modal/zipball/a33600305cdae423c7e3a65bf13ef9ea1d1b4e13",
-                "reference": "a33600305cdae423c7e3a65bf13ef9ea1d1b4e13",
+                "url": "https://api.github.com/repos/inertiaui/modal/zipball/dd7595a60f4bcf1ed769b87d54f49ddf49d4fe48",
+                "reference": "dd7595a60f4bcf1ed769b87d54f49ddf49d4fe48",
                 "shasum": ""
             },
             "require": {
@@ -1376,6 +1376,7 @@
             },
             "require-dev": {
                 "larastan/larastan": "^2.9",
+                "laravel/dusk": "^8.2",
                 "laravel/pint": "^1.14",
                 "orchestra/testbench": "^8.23||^9.1",
                 "rector/rector": "^1.0.3"
@@ -1404,7 +1405,7 @@
             "homepage": "https://github.com/inertiaui/modal",
             "support": {
                 "issues": "https://github.com/inertiaui/modal/issues",
-                "source": "https://github.com/inertiaui/modal/tree/0.5.4"
+                "source": "https://github.com/inertiaui/modal/tree/0.13.0"
             },
             "funding": [
                 {
@@ -1412,7 +1413,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-25T21:06:39+00:00"
+            "time": "2024-11-19T21:58:20+00:00"
         },
         {
             "name": "laravel/breeze",
