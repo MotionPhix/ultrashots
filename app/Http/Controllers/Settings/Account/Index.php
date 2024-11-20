@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings\Account;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Subscription;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
@@ -14,7 +15,13 @@ class Index extends Controller
   {
     $company = $request->user()->company;
 
-    $settings = $company->settings->pluck('value', 'key');
+    if ($company?->id) {
+      $settings = $company->settings->pluck('value', 'key');
+    } else {
+      return Inertia::modal('Settings/Account/Brand', [
+        'brand' => new Company()
+      ]);
+    }
 
     $settings = array_merge($settings->toArray(), [
 

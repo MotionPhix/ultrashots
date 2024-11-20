@@ -63,15 +63,13 @@ defineOptions({
               ]"
               v-if="$page.props.auth.user"
               position="bottom right"
-              class="zero__out"
               trigger="click"
-              no-chevron>
+              no-chevron
+              size="lg"
+              fab>
               <template #default>
 
-                <UltraAvatar
-                  :src="$page.props.auth.avatar"
-                  size="0.75rem"
-                />
+                <UltraAvatar :src="$page.props.auth.avatar" />
 
               </template>
 
